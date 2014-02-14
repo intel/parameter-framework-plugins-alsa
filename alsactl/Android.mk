@@ -28,7 +28,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(BOARD_USES_ALSA_AUDIO),true)
+ifeq ($(PFW_LEGACY_ALSA),true)
 
 #######################################################################
 # libalsactl-subsystem
