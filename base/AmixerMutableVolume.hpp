@@ -43,10 +43,17 @@ template <class SubsystemObjectBase>
 class AmixerMutableVolume : public SubsystemObjectBase
 {
 private:
+    /**
+     * Hack for compiling with gcc 4.5 and older:
+     * sizeof(MutableVolume::muted) in AmixerMutableVolume constructor below
+     * fails to compile before gcc 4.6:
+     * "object missing in reference to AmixerMutableVolume<...>::MutableVolume::muted"
+     */
+    typedef int8_t MutedState;
     /** The blackboard memory representation of a mutable volume. */
     struct MutableVolume
     {
-        int8_t muted;
+        MutedState muted;
         int level;
     } __attribute__((packed));
 
@@ -73,7 +80,7 @@ public:
     {
         if ((instConfigElement->getType() == CInstanceConfigurableElement::EParameterBlock) &&
             (this->getScalarSize() <= sizeof(MutableVolume)) &&
-            (this->getScalarSize() > sizeof(MutableVolume::muted)) &&
+            (this->getScalarSize() > sizeof(MutedState)) &&
             instConfigElement->getNbChildren() == 2) {
 
             // Get Actual volume level element
