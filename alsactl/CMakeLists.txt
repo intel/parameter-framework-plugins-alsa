@@ -11,3 +11,5 @@ target_link_libraries(alsactl-subsystem
     alsa-subsystem
     ${ALSA_LIBRARIES}
     ${PFW_LIBRARIES})
+
+install(TARGETS alsactl-subsystem LIBRARY DESTINATION lib)

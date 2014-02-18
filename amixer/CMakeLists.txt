@@ -11,3 +11,4 @@ target_link_libraries(amixer-subsystem
     ${ALSA_LIBRARIES}
     ${PFW_LIBRARIES})
 
+install(TARGETS amixer-subsystem LIBRARY DESTINATION lib)
