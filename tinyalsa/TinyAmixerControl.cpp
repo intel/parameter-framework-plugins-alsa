@@ -62,7 +62,7 @@ TinyAmixerControl::TinyAmixerControl(const string &mappingValue,
 
 bool TinyAmixerControl::accessHW(bool receive, string &error)
 {
-    CAutoLog autoLog(getConfigurableElement(), "AMIXER", isDebugEnabled());
+    CAutoLog autoLog(getConfigurableElement(), "ALSA", isDebugEnabled());
 
     // Mixer handle
     struct mixer *mixer;
@@ -104,14 +104,7 @@ bool TinyAmixerControl::accessHW(bool receive, string &error)
         mixerControl = mixer_get_ctl(mixer, asInteger(controlName));
     } else {
 
-        if (hasIndex()) {
-
-            mixerControl = mixer_get_ctl_by_name_and_index(mixer, controlName.c_str(), getIndex());
-
-        } else {
-
-            mixerControl = mixer_get_ctl_by_name(mixer, controlName.c_str());
-        }
+        mixerControl = mixer_get_ctl_by_name(mixer, controlName.c_str());
     }
 
     // Check control has been found
@@ -131,7 +124,7 @@ bool TinyAmixerControl::accessHW(bool receive, string &error)
     // Check available size
     if (elementCount * scalarSize != getSize()) {
 
-        error = "AMIXER: Control element count (" + asString(elementCount) +
+        error = "ALSA: Control element count (" + asString(elementCount) +
                 ") and configurable scalar element count (" +
                 asString(getSize() / scalarSize) + ") mismatch";
 

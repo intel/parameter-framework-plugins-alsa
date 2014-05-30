@@ -29,7 +29,7 @@
  */
 #include "TinyAlsaCtlPortConfig.hpp"
 #include "MappingContext.h"
-#include "AlsaCtlMappingKeys.hpp"
+#include "AlsaMappingKeys.hpp"
 
 #include <string.h>
 #include <tinyalsa/asoundlib.h>
@@ -45,15 +45,15 @@ const AlsaCtlPortConfig::FormatTranslation pcmFormatTranslationTable[] = {
     // TinyAlsa Value,                               // Litteral Value,     // Alsa Value
     { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_S8" },     // SND_PCM_FORMAT_S8
     { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_U8" },     // SND_PCM_FORMAT_U8
-    { PCM_FORMAT_S16_LE                         ,    "PCM_FORMAT_S16_LE" }, // SND_PCM_FORMAT_S16_LE
+    { PCM_FORMAT_S16_LE                        ,    "PCM_FORMAT_S16_LE" }, // SND_PCM_FORMAT_S16_LE
     { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_S16_BE" }, // SND_PCM_FORMAT_S16_BE
     { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_U16_LE" }, // SND_PCM_FORMAT_U16_LE
     { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_U16_BE" }, // SND_PCM_FORMAT_U16_BE
-    { PCM_FORMAT_S24_LE                         ,    "PCM_FORMAT_S24_LE" }, // SND_PCM_FORMAT_S24_LE
+    { PCM_FORMAT_S24_LE                        ,    "PCM_FORMAT_S24_LE" }, // SND_PCM_FORMAT_S24_LE
     { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_S24_BE" }, // SND_PCM_FORMAT_S24_BE
     { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_U24_LE" }, // SND_PCM_FORMAT_U24_LE
     { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_U24_BE" }, // SND_PCM_FORMAT_U24_BE
-    { PCM_FORMAT_S32_LE                         ,    "PCM_FORMAT_S32_LE" }  // SND_PCM_FORMAT_S32_LE
+    { PCM_FORMAT_S32_LE                        ,    "PCM_FORMAT_S32_LE" }  // SND_PCM_FORMAT_S32_LE
 };
 
 const size_t pcmFormatTranslationTableSize =

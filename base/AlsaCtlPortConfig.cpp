@@ -29,7 +29,7 @@
  */
 #include "AlsaCtlPortConfig.hpp"
 #include "MappingContext.h"
-#include "AlsaCtlMappingKeys.hpp"
+#include "AlsaMappingKeys.hpp"
 #include <string.h>
 #include <assert.h>
 #include <sstream>

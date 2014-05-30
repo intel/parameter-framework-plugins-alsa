@@ -34,7 +34,7 @@
 #include "BitParameterBlockType.h"
 #include "ParameterBlockType.h"
 #include "MappingContext.h"
-#include "AmixerMappingKeys.hpp"
+#include "AlsaMappingKeys.hpp"
 #include "AutoLog.h"
 #include <string.h>
 #include <ctype.h>
@@ -46,14 +46,12 @@ AmixerControl::AmixerControl(const string &mappingValue,
                              CInstanceConfigurableElement *instanceConfigurableElement,
                              const CMappingContext &context)
     : base(mappingValue, instanceConfigurableElement,
-           AmixerAmend1,
-           (AmixerAmendEnd - AmixerAmend1 + 1),
+           AlsaAmend1,
+           (AlsaAmendEnd - AlsaAmend1 + 1),
            context),
       _scalarSize(0),
       _hasWrongElementTypeError(false),
-      _isDebugEnabled(context.iSet(AmixerDebugEnable)),
-      _hasIndex(context.iSet(AmixerIndex)),
-      _index(context.getItemAsInteger(AmixerIndex))
+      _isDebugEnabled(context.iSet(AlsaDebugEnable))
 {
     // Check we are able to handle elements (no exception support, defer the error)
     switch (instanceConfigurableElement->getType()) {
@@ -101,14 +99,12 @@ AmixerControl::AmixerControl(const string &mappingValue,
                              CInstanceConfigurableElement *instanceConfigurableElement,
                              const CMappingContext &context, uint32_t scalarSize)
     : base(mappingValue, instanceConfigurableElement,
-           AmixerAmend1,
-           (AmixerAmendEnd - AmixerAmend1 + 1),
+           AlsaAmend1,
+           (AlsaAmendEnd - AlsaAmend1 + 1),
            context),
       _scalarSize(scalarSize),
       _hasWrongElementTypeError(false),
-      _isDebugEnabled(context.iSet(AmixerDebugEnable)),
-      _hasIndex(context.iSet(AmixerIndex)),
-      _index(context.getItemAsInteger(AmixerIndex))
+      _isDebugEnabled(context.iSet(AlsaDebugEnable))
 {
 }
 
@@ -117,10 +113,9 @@ void AmixerControl::logControlInfo(bool receive) const
     if (_isDebugEnabled) {
 
         string controlName = getFormattedMappingValue();
-        log_info("%s AMIXER Element Instance: %s\t\t(Control Element: %s, index:%d)",
+        log_info("%s ALSA Element Instance: %s\t\t(Control Element: %s)",
                  receive ? "Reading" : "Writing",
-                 getConfigurableElement()->getPath().c_str(), controlName.c_str(),
-                 _hasIndex ? _index : 0);
+                 getConfigurableElement()->getPath().c_str(), controlName.c_str());
     }
 }
 

@@ -27,31 +27,34 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#pragma once
 
-#include "AlsaCtlMappingKeys.hpp"
+#include "LegacyAlsaSubsystem.hpp"
+#include "LegacyAmixerControl.hpp"
+#include "LegacyAlsaCtlPortConfig.hpp"
 #include "SubsystemObjectFactory.h"
-#include "AmixerSubsystemTemplate.hpp"
+#include "AlsaMappingKeys.hpp"
+#include "AmixerMutableVolume.hpp"
 
-/**
- * Template class for Alsa port configuration subsystems.
- * This class is a template for alsa port configuration subsystems, it will be used by both legacy
- * alsa and tiny alsa subsystems.
- */
-template <class AmixerControlType, class AmixerByteControlType, class AlsaCtlPortConfigType>
-class AlsaCtlSubsystem : public AmixerSubsystem<AmixerControlType, AmixerByteControlType>
+LegacyAlsaSubsystem::LegacyAlsaSubsystem(const string &name) : AlsaSubsystem(name)
 {
-public:
-    AlsaCtlSubsystem(const string &name)
-        : AmixerSubsystem<AmixerControlType, AmixerByteControlType>(name)
-    {
-        // Provide mapping keys to upper layer
-        this->addContextMappingKey("Device");
+    // Provide creators to upper layer
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<LegacyAmixerControl>("Control", 1 << AlsaCard)
+        );
 
-        // Provide creators to upper layer
-        this->addSubsystemObjectFactory(
-            new TSubsystemObjectFactory<AlsaCtlPortConfigType>(
-                "PortConfig", (1 << AmixerCard) | (1 << AlsaCtlDevice))
-            );
-    }
-};
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<LegacyAmixerControl>(
+            "ByteControl", 1 << AlsaCard)
+        );
+
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<
+            AmixerMutableVolume<LegacyAmixerControl> >("Volume", 1 << AlsaCard)
+        );
+
+
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<LegacyAlsaCtlPortConfig>(
+            "PortConfig", (1 << AlsaCard) | (1 << AlsaCtlDevice))
+        );
+}

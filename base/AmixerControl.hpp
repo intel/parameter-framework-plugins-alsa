@@ -114,20 +114,6 @@ protected:
      */
     bool isDebugEnabled() const { return _isDebugEnabled; }
 
-    /**
-     * Does this control has an index
-     *
-     * @return true if the control has an index, false otherwise
-     */
-    bool hasIndex() const { return _hasIndex; }
-
-    /**
-     * Returns the index of the control
-     *
-     * @return the index
-     */
-    uint32_t getIndex() const { return _index; }
-
 protected:
     /** Read an integer from the blackboard
      *
@@ -156,10 +142,4 @@ private:
     bool _hasWrongElementTypeError;
     /** Debug on */
     bool _isDebugEnabled;
-    /** An index can be used to complete the control name. It is possible to have multiple alsa
-     *  controls with the same name, but with a different index. In this case, the control value
-     *  can be accessed through the pair {control name,control index} */
-    bool _hasIndex;
-    /** The value of the control's index, 0 by default. */
-    uint32_t _index;
 };

@@ -30,43 +30,26 @@
 #pragma once
 
 #include "Subsystem.h"
-#include "AmixerMappingKeys.hpp"
-#include "SubsystemObjectFactory.h"
-#include "AmixerMutableVolume.hpp"
+#include <string>
 
 /**
- * Template class for Alsa mixer subsystems.
- * This class is a template for alsa mixer control subsystems, it will be used by both legacy alsa
- * and tiny alsa subsystems.
+ * Base class for Alsa subsystems.
+ *
+ * It only defines which context mapping keys are to be supported by such
+ * plugins.
  */
-template <class AmixerControlType, class AmixerByteControlType>
-class AmixerSubsystem : public CSubsystem
+class AlsaSubsystem : public CSubsystem
 {
 public:
-    AmixerSubsystem(const string &name) : CSubsystem(name)
+    AlsaSubsystem(const std::string &name) : CSubsystem(name)
     {
         // Provide mapping keys to upper layer
         addContextMappingKey("Card");
-        addContextMappingKey("Index");
         addContextMappingKey("Debug");
+        addContextMappingKey("Device");
         addContextMappingKey("Amend1");
         addContextMappingKey("Amend2");
         addContextMappingKey("Amend3");
         addContextMappingKey("Amend4");
-
-        // Provide creators to upper layer
-        addSubsystemObjectFactory(
-            new TSubsystemObjectFactory<AmixerControlType>("Control", 1 << AmixerCard)
-            );
-
-        addSubsystemObjectFactory(
-            new TSubsystemObjectFactory<AmixerByteControlType>(
-                "ByteControl", 1 << AmixerCard)
-            );
-
-        addSubsystemObjectFactory(
-            new TSubsystemObjectFactory<
-                AmixerMutableVolume<AmixerControlType> >("Volume", 1 << AmixerCard)
-            );
     }
 };

@@ -27,21 +27,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#pragma once
+#include "SubsystemLibrary.h"
+#include "NamedElementBuilderTemplate.h"
+#include "TinyAlsaSubsystem.hpp"
 
-/** Mapping item types */
-enum AmixerItemType
+extern "C"
 {
-    AmixerCard = 0,
-    AmixerIndex,
-    AmixerDebugEnable,
-    AmixerAmend1,
-    AmixerAmend2,
-    AmixerAmend3,
-    AmixerAmend4,
-    AmixerAmendEnd = AmixerAmend4,
-
-    NbAmixerItemTypes
-};
-
-#define NB_AMIXER_AMEND (AmixerAmendEnd - AmixerAmend1 + 1)
+/**
+ * TinyAmixer subsystem builder
+ * This function is called when the PFW parses a subsystem structure XML of type "ALSA".
+ * It will then create an TinyAMixer Subsystem
+ *
+ * @param[in] subsystemLibrary the pointer on the subsystem library
+ */
+void getTINYALSASubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
+{
+    subsystemLibrary->addElementBuilder(
+        "ALSA", new TNamedElementBuilderTemplate<TinyAlsaSubsystem>
+        );
+}
+}

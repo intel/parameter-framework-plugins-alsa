@@ -28,39 +28,41 @@
 
 LOCAL_PATH := $(call my-dir)
 
-include $(CLEAR_VARS)
+# libtinyalsa-subsystem (target build)
+#######################################################################
 
+include $(CLEAR_VARS)
 LOCAL_SRC_FILES := \
     TinyAlsaCtlPortConfig.cpp \
-    TinyAlsaCtlSubsystemBuilder.cpp \
+    TinyAmixerControl.cpp \
+    TinyAmixerControlArray.cpp \
+    TinyAmixerControlValue.cpp \
+    TinyAlsaSubsystem.cpp \
+    TinyAlsaSubsystemBuilder.cpp \
 
-LOCAL_C_INCLUDES := \
-    external/parameter-framework/core/parameter \
-    external/tinyalsa/include \
-    external/stlport/stlport \
-    bionic/ \
+LOCAL_C_INCLUDES += external/tinyalsa/include
+
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
 
 LOCAL_SHARED_LIBRARIES := \
     libparameter \
-    libstlport \
-    libcutils \
-    libicuuc \
     libtinyalsa \
-    libtinyamixer-subsystem \
 
 LOCAL_STATIC_LIBRARIES := \
-    libalsa-subsystem \
-    libxmlserializer \
-    libxml2 \
+    libalsabase-subsystem \
+    libparameter_includes \
+    libxmlserializer_includes \
 
-LOCAL_CFLAGS := \
+LOCAL_CFLAGS += \
     -Wall \
     -Werror \
     -Wextra \
-    -Wno-unused-parameter \
+    -Wno-unused-parameter    # Needed to workaround STL bug
 
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/parameter-framework-plugins/Audio
-LOCAL_MODULE := libtinyalsactl-subsystem
 LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := libtinyalsa-subsystem
 
+include external/stlport/libstlport.mk
 include $(BUILD_SHARED_LIBRARY)

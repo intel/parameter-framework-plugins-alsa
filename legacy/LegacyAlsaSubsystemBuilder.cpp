@@ -29,24 +29,22 @@
  */
 #include "SubsystemLibrary.h"
 #include "NamedElementBuilderTemplate.h"
-#include "AmixerSubsystemTemplate.hpp"
+#include "LegacyAlsaSubsystem.hpp"
 #include "LegacyAmixerControl.hpp"
 
 extern "C"
 {
 /**
- * Amixer subsystem builder
- * This function is called when the PFW parses a subsystem structure XML of type "AMIXER".
+ * Alsa subsystem builder
+ * This function is called when the PFW parses a subsystem structure XML of type "ALSA".
  * It will then create an Amixer Subsystem
  *
  * @param[in] subsystemLibrary the pointer on the subsystem library
  */
-void getAMIXERSubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
+void getALSASubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
 {
     subsystemLibrary->addElementBuilder(
-        "AMIXER",
-        new TNamedElementBuilderTemplate<
-            AmixerSubsystem<LegacyAmixerControl, LegacyAmixerControl> >
+        "ALSA", new TNamedElementBuilderTemplate<LegacyAlsaSubsystem>
         );
 }
 }

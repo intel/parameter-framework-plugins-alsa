@@ -96,7 +96,7 @@ void TinyAmixerControlArray::logControlValues(bool receive, uint32_t elementCoun
     std::stringstream log;
 
     log << (receive ? "Reading" : "Writing");
-    log << " alsa element: " << getControlName() << " " << getIndex() << " with value: ";
+    log << " alsa element: " << getControlName() << " with value: ";
     for (idx = 0; idx < elementCount; idx++) {
         log.width(2);
         log.fill('0');

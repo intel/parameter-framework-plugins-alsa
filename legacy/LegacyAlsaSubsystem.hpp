@@ -27,26 +27,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "SubsystemLibrary.h"
-#include "NamedElementBuilderTemplate.h"
-#include "AmixerSubsystemTemplate.hpp"
-#include "TinyAmixerControlValue.hpp"
-#include "TinyAmixerControlArray.hpp"
 
-extern "C"
+#pragma once
+
+#include "AlsaSubsystem.hpp"
+
+class LegacyAlsaSubsystem : public AlsaSubsystem
 {
-/**
- * TinyAmixer subsystem builder
- * This function is called when the PFW parses a subsystem structure XML of type "AMIXER".
- * It will then create an TinyAMixer Subsystem
- *
- * @param[in] subsystemLibrary the pointer on the subsystem library
- */
-void getTINYAMIXERSubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
-{
-    subsystemLibrary->addElementBuilder(
-        "AMIXER", new TNamedElementBuilderTemplate<
-            AmixerSubsystem<TinyAmixerControlValue, TinyAmixerControlArray> >
-        );
-}
-}
+public:
+    LegacyAlsaSubsystem(const string &name);
+};

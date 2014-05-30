@@ -27,27 +27,35 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "SubsystemLibrary.h"
-#include "NamedElementBuilderTemplate.h"
-#include "AlsaCtlSubsystemTemplate.hpp"
-#include "LegacyAmixerControl.hpp"
-#include "LegacyAlsaCtlPortConfig.hpp"
 
-extern "C"
+#include "TinyAlsaSubsystem.hpp"
+#include "TinyAmixerControlArray.hpp"
+#include "TinyAmixerControlValue.hpp"
+#include "TinyAlsaCtlPortConfig.hpp"
+#include "SubsystemObjectFactory.h"
+#include "AlsaMappingKeys.hpp"
+#include "AmixerMutableVolume.hpp"
+
+TinyAlsaSubsystem::TinyAlsaSubsystem(const string &name) : AlsaSubsystem(name)
 {
-/**
- * AlsaCtl subsystem builder
- * This function is called when the PFW parses a subsystem structure XML of type "ALSACTL".
- * It will then create an AlsaCtl Subsystem
- *
- * @param[in] subsystemLibrary the pointer on the subsystem library
- */
-void getALSACTLSubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
-{
-    subsystemLibrary->addElementBuilder(
-        "ALSACTL",
-        new TNamedElementBuilderTemplate<AlsaCtlSubsystem<LegacyAmixerControl,
-                                                          LegacyAmixerControl,
-                                                          LegacyAlsaCtlPortConfig> > );
-}
+    // Provide creators to upper layer
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<TinyAmixerControlValue>("Control", 1 << AlsaCard)
+        );
+
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<TinyAmixerControlArray>(
+            "ByteControl", 1 << AlsaCard)
+        );
+
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<
+            AmixerMutableVolume<TinyAmixerControlValue> >("Volume", 1 << AlsaCard)
+        );
+
+
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<TinyAlsaCtlPortConfig>(
+            "PortConfig", (1 << AlsaCard) | (1 << AlsaCtlDevice))
+        );
 }

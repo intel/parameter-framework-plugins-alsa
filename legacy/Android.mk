@@ -31,44 +31,43 @@ LOCAL_PATH := $(call my-dir)
 ifeq ($(PFW_LEGACY_ALSA),true)
 
 #######################################################################
-# libamixer-subsystem
+# libalsa-subsystem
 
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-    LegacyAmixerSubsystemBuilder.cpp \
+    LegacyAlsaSubsystem.cpp \
+    LegacyAlsaSubsystemBuilder.cpp \
     LegacyAmixerControl.cpp \
+    LegacyAlsaCtlPortConfig.cpp \
 
-LOCAL_C_INCLUDES += \
-    external/parameter-framework/core/parameter \
-    external/alsa-lib/include \
-    external/stlport/stlport \
-    bionic \
+LOCAL_C_INCLUDES += external/alsa-lib/include
 
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
 
 LOCAL_SHARED_LIBRARIES := \
     libparameter \
-    libstlport \
-    libicuuc \
     libasound \
 
 LOCAL_STATIC_LIBRARIES := \
-    libalsa-subsystem \
-    libxmlserializer \
-    libxml2 \
+    libalsabase-subsystem \
+    libparameter_includes \
+    libxmlserializer_includes \
 
+# -D_POSIX_C_SOURCE=200809 is needed because alsa-lib is redefining
+# the timeval and timespec structures
 LOCAL_CFLAGS += \
     -D_POSIX_C_SOURCE=200809 \
     -Wall \
     -Werror \
     -Wextra \
-    -Wno-unused-parameter \
+    -Wno-unused-parameter    # Needed to workaround STL bug
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/parameter-framework-plugins/Audio
-LOCAL_MODULE := libamixer-subsystem
+LOCAL_MODULE := libalsa-subsystem
 LOCAL_MODULE_TAGS := optional
 
+include external/stlport/libstlport.mk
 include $(BUILD_SHARED_LIBRARY)
 
-endif
+endif # $(PFW_LEGACY_ALSA)

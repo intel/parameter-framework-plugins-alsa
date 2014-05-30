@@ -27,14 +27,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 #pragma once
 
-#include "AmixerMappingKeys.hpp"
+#include "AlsaSubsystem.hpp"
 
-/** Mapping item types */
-enum AlsaCtlltemType
+class TinyAlsaSubsystem : public AlsaSubsystem
 {
-    AlsaCtlDevice = NbAmixerItemTypes,
-
-    NbAlsaCtlItemTypes
+public:
+    TinyAlsaSubsystem(const string &name);
 };

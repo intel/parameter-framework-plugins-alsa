@@ -27,29 +27,21 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "SubsystemLibrary.h"
-#include "NamedElementBuilderTemplate.h"
-#include "AlsaCtlSubsystemTemplate.hpp"
-#include "TinyAlsaCtlPortConfig.hpp"
-#include "TinyAmixerControlArray.hpp"
-#include "TinyAmixerControlValue.hpp"
+#pragma once
 
-extern "C"
+/** Mapping item types */
+enum AlsaItemType
 {
-/**
- * TinyAlsaCtl subsystem builder
- * This function is called when the PFW parses a subsystem structure XML of type "ALSACTL".
- * It will then create an TinyAlsaCtl Subsystem
- *
- * @param[in] subsystemLibrary the pointer on the subsystem library
- */
-void getTINYALSACTLSubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
-{
-    subsystemLibrary->addElementBuilder(
-        "ALSACTL",
-        new TNamedElementBuilderTemplate<AlsaCtlSubsystem<
-                                             TinyAmixerControlValue,
-                                             TinyAmixerControlArray,
-                                             TinyAlsaCtlPortConfig> > );
-}
-}
+    AlsaCard = 0,
+    AlsaDebugEnable,
+    AlsaCtlDevice,
+    AlsaAmend1,
+    AlsaAmend2,
+    AlsaAmend3,
+    AlsaAmend4,
+    AlsaAmendEnd = AlsaAmend4,
+
+    NbAlsaItemTypes
+};
+
+#define NB_ALSA_AMEND (AlsaAmendEnd - AlsaAmend1 + 1)
