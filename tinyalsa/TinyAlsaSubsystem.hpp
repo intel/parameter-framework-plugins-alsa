@@ -31,9 +31,24 @@
 #pragma once
 
 #include "AlsaSubsystem.hpp"
+#include <map>
+#include <tinyalsa/asoundlib.h>
 
 class TinyAlsaSubsystem : public AlsaSubsystem
 {
 public:
     TinyAlsaSubsystem(const string &name);
+    ~TinyAlsaSubsystem();
+
+    /**
+     * Return a handle to the card's mixer.
+     */
+    struct mixer *getMixerHandle(int32_t cardNumber);
+
+private:
+    typedef std::map<int32_t, struct mixer *> MixerMap;
+    /**
+     * Cache to each card's mixer handle.
+     */
+    MixerMap mMixers;
 };

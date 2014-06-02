@@ -28,6 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "TinyAmixerControl.hpp"
+#include "TinyAlsaSubsystem.hpp"
 #include "InstanceConfigurableElement.h"
 #include "MappingContext.h"
 #include "AutoLog.h"
@@ -90,7 +91,10 @@ bool TinyAmixerControl::accessHW(bool receive, string &error)
     }
 
     // Open alsa mixer
-    mixer = mixer_open(cardIndex);
+    // getMixerHandle is non-const; we need to forcefully remove the constness
+    // then, we need to cast the generic subsystem into a TinyAlsaSubsystem.
+    mixer = static_cast<TinyAlsaSubsystem *>(
+        const_cast<CSubsystem *>(getSubsystem()))->getMixerHandle(cardIndex);
 
     if (!mixer) {
 
@@ -111,8 +115,6 @@ bool TinyAmixerControl::accessHW(bool receive, string &error)
     if (!mixerControl) {
         error = "Failed to open mixer control: " + controlName;
 
-        // Close mixer
-        mixer_close(mixer);
         return false;
     }
 
@@ -128,8 +130,6 @@ bool TinyAmixerControl::accessHW(bool receive, string &error)
                 ") and configurable scalar element count (" +
                 asString(getSize() / scalarSize) + ") mismatch";
 
-        // Close mixer
-        mixer_close(mixer);
         return false;
     }
 
@@ -144,9 +144,6 @@ bool TinyAmixerControl::accessHW(bool receive, string &error)
         success = writeControl(mixerControl, elementCount, error);
 
     }
-
-    // Close mixer
-    mixer_close(mixer);
 
     return success;
 }

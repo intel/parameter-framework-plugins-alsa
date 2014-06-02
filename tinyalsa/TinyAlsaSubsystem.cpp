@@ -36,7 +36,7 @@
 #include "AlsaMappingKeys.hpp"
 #include "AmixerMutableVolume.hpp"
 
-TinyAlsaSubsystem::TinyAlsaSubsystem(const string &name) : AlsaSubsystem(name)
+TinyAlsaSubsystem::TinyAlsaSubsystem(const string &name) : AlsaSubsystem(name), mMixers()
 {
     // Provide creators to upper layer
     addSubsystemObjectFactory(
@@ -58,4 +58,30 @@ TinyAlsaSubsystem::TinyAlsaSubsystem(const string &name) : AlsaSubsystem(name)
         new TSubsystemObjectFactory<TinyAlsaCtlPortConfig>(
             "PortConfig", (1 << AlsaCard) | (1 << AlsaCtlDevice))
         );
+}
+
+TinyAlsaSubsystem::~TinyAlsaSubsystem()
+{
+    MixerMap::const_iterator it;
+
+    for (it = mMixers.begin(); it != mMixers.end(); ++it) {
+        mixer_close(it->second);
+    }
+}
+
+struct mixer *TinyAlsaSubsystem::getMixerHandle(int32_t cardNumber)
+{
+    MixerMap::const_iterator it = mMixers.find(cardNumber);
+    if (it != mMixers.end()) {
+        return it->second;
+    }
+
+    // create handle
+    struct mixer *newMixer = mixer_open(cardNumber);
+    if (newMixer == NULL) {
+        return NULL;
+    }
+    mMixers.insert(std::make_pair(cardNumber, newMixer));
+
+    return newMixer;
 }
