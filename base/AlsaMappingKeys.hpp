@@ -44,4 +44,4 @@ enum AlsaItemType
     NbAlsaItemTypes
 };
 
-#define NB_ALSA_AMEND (AlsaAmendEnd - AlsaAmend1 + 1)
+static const int gNbAlsaAmends (AlsaAmendEnd - AlsaAmend1 + 1);
