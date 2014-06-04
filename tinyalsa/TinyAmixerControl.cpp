@@ -61,6 +61,11 @@ TinyAmixerControl::TinyAmixerControl(const string &mappingValue,
 {
 }
 
+uint32_t TinyAmixerControl::getNumValues(struct mixer_ctl *mixerControl)
+{
+    return mixer_ctl_get_num_values(mixerControl);
+}
+
 bool TinyAmixerControl::accessHW(bool receive, string &error)
 {
     CAutoLog autoLog(getConfigurableElement(), "ALSA", isDebugEnabled());
@@ -119,7 +124,7 @@ bool TinyAmixerControl::accessHW(bool receive, string &error)
     }
 
     // Get element count
-    elementCount =  mixer_ctl_get_num_values(mixerControl);
+    elementCount = getNumValues(mixerControl);
 
     uint32_t scalarSize = getScalarSize();
 

@@ -45,22 +45,51 @@ TinyAmixerControlArray::TinyAmixerControlArray(
 {
 }
 
+int TinyAmixerControlArray::doGetArrayMixer(struct mixer_ctl *mixerControl,
+                                            void *array,
+                                            size_t elementCount)
+{
+    int ret = mixer_ctl_get_array(mixerControl, array, elementCount);
+
+    if (isDebugEnabled() && ret == 0) {
+        logControlValues(true, array, elementCount);
+    }
+
+    return ret;
+}
+
+int TinyAmixerControlArray::doSetArrayMixer(struct mixer_ctl *mixerControl,
+                                            const void *array,
+                                            size_t elementCount)
+{
+    if (isDebugEnabled()) {
+        logControlValues(false, array, elementCount);
+    }
+
+    return mixer_ctl_set_array(mixerControl, array, elementCount);
+}
+
+int TinyAmixerControlArray::getArrayMixer(struct mixer_ctl *mixerControl, uint32_t elementCount)
+{
+    return doGetArrayMixer(mixerControl, getBlackboardLocation(), elementCount);
+}
+
+int TinyAmixerControlArray::setArrayMixer(struct mixer_ctl *mixerControl, uint32_t elementCount)
+{
+    return doSetArrayMixer(mixerControl, getBlackboardLocation(), elementCount);
+}
+
 bool TinyAmixerControlArray::readControl(struct mixer_ctl *mixerControl,
                                          uint32_t elementCount,
                                          string &error)
 {
     int err;
 
-    if ((err = mixer_ctl_get_array(mixerControl, getBlackboardLocation(), elementCount)) < 0) {
+    if ((err = getArrayMixer(mixerControl, elementCount)) < 0) {
 
         error = "Failed to read value in mixer control: " + getControlName() + ": " +
                 strerror(-err);
         return false;
-    }
-
-    if (isDebugEnabled()) {
-
-        logControlValues(true, elementCount);
     }
 
     return true;
@@ -72,13 +101,8 @@ bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl,
 {
     int err;
 
-    if (isDebugEnabled()) {
-
-        logControlValues(false, elementCount);
-    }
-
     // Write element
-    if ((err = mixer_ctl_set_array(mixerControl, getBlackboardLocation(), elementCount)) < 0) {
+    if ((err = setArrayMixer(mixerControl, elementCount)) < 0) {
 
         error = "Failed to write value in mixer control: " + getControlName() + ": " +
                 strerror(-err);
@@ -88,10 +112,11 @@ bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl,
     return true;
 }
 
-void TinyAmixerControlArray::logControlValues(bool receive, uint32_t elementCount) const
+void TinyAmixerControlArray::logControlValues(bool receive,
+                                              const void *array,
+                                              uint32_t elementCount) const
 {
-    const unsigned char *buffer =
-        reinterpret_cast<const unsigned char *>(getBlackboardLocation());
+    const unsigned char *buffer = reinterpret_cast<const unsigned char *>(array);
     unsigned int idx;
     std::stringstream log;
 

@@ -58,6 +58,46 @@ protected:
                               uint32_t elementCount,
                               string &error);
 
+    /**
+     * Derivable method for storing alsa ByteControls into blackboard
+     *
+     * @param[in] mixerControl the control to be read
+     * @param[in] count size of the control
+     *
+     * @return 0 in case of success, negative errno else
+     */
+    virtual int getArrayMixer(struct mixer_ctl *mixerControl, size_t count);
+    /**
+     * Derivable method for syncing the blackboard to alsa ByteControls
+     *
+     * @param[in] mixerControl the control to be written
+     * @param[in] count size of the control
+     *
+     * @return 0 in case of success, negative errno else
+     */
+    virtual int setArrayMixer(struct mixer_ctl *mixerControl, size_t count);
+    /** Low-level (non-derivable) method used by getArrayMixer()
+     *
+     * @param[in] mixerControl the control to be read
+     * @param[out] array where to store the control's content
+     * @param[in] count size of the control
+     *
+     * @return 0 in case of success, negative errno else
+     */
+    int doGetArrayMixer(struct mixer_ctl *mixerControl, void *array, size_t count);
+    /** Low-level (non-derivable) method used by setArrayMixer()
+     *
+     * @param[in] mixerControl the control to be written
+     * @param[out] array content to be written
+     * @param[in] count size of the control
+     *
+     * @return 0 in case of success, negative errno else
+     */
+    int doSetArrayMixer(struct mixer_ctl *mixerControl, const void *array, size_t count);
+
+    /** Scalar size for byte mixer controls */
+    static const uint32_t _byteScalarSize = 1;
+
 private:
     /**
      * Log the values read or written in an alsa mixer BYTE control
@@ -65,9 +105,5 @@ private:
      * @param[in] receive a boolean indicating if we receive or send the values from/to tinyalsa
      * @param[in] elementCount the number of element to log
      */
-    void logControlValues(bool receive, uint32_t elementCount) const;
-
-private:
-    /** Scalar size for byte mixer controls */
-    static const uint32_t _byteScalarSize = 1;
+    void logControlValues(bool receive, const void *array, uint32_t elementCount) const;
 };
