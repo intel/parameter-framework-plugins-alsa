@@ -106,4 +106,10 @@ private:
      * @param[in] elementCount the number of element to log
      */
     void logControlValues(bool receive, const void *array, uint32_t elementCount) const;
+    /**
+     * Method for displaying and cleaning stringstream objects
+     *
+     * @param[in] sstm stringstream object to be displayed and cleaned
+     */
+    void displayAndCleanString(std::stringstream &stringValue) const;
 };

@@ -36,6 +36,8 @@
 #include <sstream>
 
 #define base TinyAmixerControl
+// Maximum characters per line
+#define maxLogLine 64
 
 TinyAmixerControlArray::TinyAmixerControlArray(
     const string &mappingValue,
@@ -112,6 +114,12 @@ bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl,
     return true;
 }
 
+void TinyAmixerControlArray::displayAndCleanString(std::stringstream &stringValue) const
+{
+    log_info("%s", stringValue.str().c_str());
+    stringValue.str(std::string());
+}
+
 void TinyAmixerControlArray::logControlValues(bool receive,
                                               const void *array,
                                               uint32_t elementCount) const
@@ -122,14 +130,24 @@ void TinyAmixerControlArray::logControlValues(bool receive,
 
     log << (receive ? "Reading" : "Writing");
     log << " alsa element: " << getControlName() << " with value: ";
+    displayAndCleanString(log);
     for (idx = 0; idx < elementCount; idx++) {
         log.width(2);
         log.fill('0');
         // cast to uint16_t necessary in order to avoid 'buffer[idx]' to be
         // treated as a printable character, apparently
         log << hex << static_cast<unsigned short>(buffer[idx]) << " ";
+        if ((idx != 0) && ((idx % maxLogLine) == 0)) {
+            log << '\n';
+            displayAndCleanString(log);
+        }
     }
-    log << "[" << dec << elementCount << " bytes]" << endl;
 
-    log_info("%s", log.str().c_str());
+    if (log.str().length() > 0) {
+        log << '\n';
+        displayAndCleanString(log);
+    }
+
+    log << "[" << dec << elementCount << " bytes]" << endl;
+    displayAndCleanString(log);
 }
