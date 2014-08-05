@@ -27,27 +27,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "SubsystemLibrary.h"
-#include "NamedElementBuilderTemplate.h"
-#include "AlsaCtlSubsystemTemplate.hpp"
-#include "LegacyAmixerControl.hpp"
-#include "LegacyAlsaCtlPortConfig.hpp"
 
-extern "C"
+#pragma once
+
+#include "AlsaSubsystem.hpp"
+
+class LegacyAlsaSubsystem : public AlsaSubsystem
 {
-/**
- * AlsaCtl subsystem builder
- * This function is called when the PFW parses a subsystem structure XML of type "ALSACTL".
- * It will then create an AlsaCtl Subsystem
- *
- * @param[in] subsystemLibrary the pointer on the subsystem library
- */
-void getALSACTLSubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
-{
-    subsystemLibrary->addElementBuilder(
-        "ALSACTL",
-        new TNamedElementBuilderTemplate<AlsaCtlSubsystem<LegacyAmixerControl,
-                                                          LegacyAmixerControl,
-                                                          LegacyAlsaCtlPortConfig> > );
-}
-}
+public:
+    LegacyAlsaSubsystem(const string &name);
+};

@@ -29,7 +29,7 @@
  */
 #include "AlsaSubsystemObject.hpp"
 #include "MappingContext.h"
-#include "AmixerMappingKeys.hpp"
+#include "AlsaMappingKeys.hpp"
 
 #include <limits.h>
 #include <unistd.h>
@@ -44,8 +44,8 @@ AlsaSubsystemObject::AlsaSubsystemObject(const string &mappingValue,
                                          CInstanceConfigurableElement *instanceConfigurableElement,
                                          const CMappingContext &context)
     : base(instanceConfigurableElement, mappingValue),
-      _cardName(context.getItem(AmixerCard)),
-      _cardIndex(getCardNumberByName(context.getItem(AmixerCard)))
+      _cardName(context.getItem(AlsaCard)),
+      _cardIndex(getCardNumberByName(context.getItem(AlsaCard)))
 {
 
 }
@@ -56,8 +56,8 @@ AlsaSubsystemObject::AlsaSubsystemObject(const string &mappingValue,
                                          uint32_t nbAmendKeys,
                                          const CMappingContext &context)
     : base(instanceConfigurableElement, mappingValue, firstAmendKey, nbAmendKeys, context),
-      _cardName(context.getItem(AmixerCard)),
-      _cardIndex(getCardNumberByName(context.getItem(AmixerCard)))
+      _cardName(context.getItem(AlsaCard)),
+      _cardIndex(getCardNumberByName(context.getItem(AlsaCard)))
 {
 
 }

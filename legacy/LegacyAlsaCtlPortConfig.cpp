@@ -29,7 +29,7 @@
  */
 #include "LegacyAlsaCtlPortConfig.hpp"
 #include "MappingContext.h"
-#include "AlsaCtlMappingKeys.hpp"
+#include "AlsaMappingKeys.hpp"
 #include <string.h>
 #include <alsa/asoundlib.h>
 #include <sstream>
@@ -56,7 +56,7 @@ LegacyAlsaCtlPortConfig::LegacyAlsaCtlPortConfig(
     _streamHandle[Capture] = NULL;
 
     // Retrieve card index
-    string cardIndex = context.getItem(AmixerCard);
+    string cardIndex = context.getItem(AlsaCard);
 
     // Create device name
     ostringstream streamName;

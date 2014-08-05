@@ -28,6 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "TinyAmixerControl.hpp"
+#include "TinyAlsaSubsystem.hpp"
 #include "InstanceConfigurableElement.h"
 #include "MappingContext.h"
 #include "AutoLog.h"
@@ -60,9 +61,14 @@ TinyAmixerControl::TinyAmixerControl(const string &mappingValue,
 {
 }
 
+uint32_t TinyAmixerControl::getNumValues(struct mixer_ctl *mixerControl)
+{
+    return mixer_ctl_get_num_values(mixerControl);
+}
+
 bool TinyAmixerControl::accessHW(bool receive, string &error)
 {
-    CAutoLog autoLog(getConfigurableElement(), "AMIXER", isDebugEnabled());
+    CAutoLog autoLog(getConfigurableElement(), "ALSA", isDebugEnabled());
 
     // Mixer handle
     struct mixer *mixer;
@@ -90,7 +96,10 @@ bool TinyAmixerControl::accessHW(bool receive, string &error)
     }
 
     // Open alsa mixer
-    mixer = mixer_open(cardIndex);
+    // getMixerHandle is non-const; we need to forcefully remove the constness
+    // then, we need to cast the generic subsystem into a TinyAlsaSubsystem.
+    mixer = static_cast<TinyAlsaSubsystem *>(
+        const_cast<CSubsystem *>(getSubsystem()))->getMixerHandle(cardIndex);
 
     if (!mixer) {
 
@@ -104,39 +113,28 @@ bool TinyAmixerControl::accessHW(bool receive, string &error)
         mixerControl = mixer_get_ctl(mixer, asInteger(controlName));
     } else {
 
-        if (hasIndex()) {
-
-            mixerControl = mixer_get_ctl_by_name_and_index(mixer, controlName.c_str(), getIndex());
-
-        } else {
-
-            mixerControl = mixer_get_ctl_by_name(mixer, controlName.c_str());
-        }
+        mixerControl = mixer_get_ctl_by_name(mixer, controlName.c_str());
     }
 
     // Check control has been found
     if (!mixerControl) {
         error = "Failed to open mixer control: " + controlName;
 
-        // Close mixer
-        mixer_close(mixer);
         return false;
     }
 
     // Get element count
-    elementCount =  mixer_ctl_get_num_values(mixerControl);
+    elementCount = getNumValues(mixerControl);
 
     uint32_t scalarSize = getScalarSize();
 
     // Check available size
     if (elementCount * scalarSize != getSize()) {
 
-        error = "AMIXER: Control element count (" + asString(elementCount) +
+        error = "ALSA: Control element count (" + asString(elementCount) +
                 ") and configurable scalar element count (" +
                 asString(getSize() / scalarSize) + ") mismatch";
 
-        // Close mixer
-        mixer_close(mixer);
         return false;
     }
 
@@ -151,9 +149,6 @@ bool TinyAmixerControl::accessHW(bool receive, string &error)
         success = writeControl(mixerControl, elementCount, error);
 
     }
-
-    // Close mixer
-    mixer_close(mixer);
 
     return success;
 }

@@ -27,21 +27,24 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#pragma once
+#include "SubsystemLibrary.h"
+#include "NamedElementBuilderTemplate.h"
+#include "LegacyAlsaSubsystem.hpp"
+#include "LegacyAmixerControl.hpp"
 
-/** Mapping item types */
-enum AmixerItemType
+extern "C"
 {
-    AmixerCard = 0,
-    AmixerIndex,
-    AmixerDebugEnable,
-    AmixerAmend1,
-    AmixerAmend2,
-    AmixerAmend3,
-    AmixerAmend4,
-    AmixerAmendEnd = AmixerAmend4,
-
-    NbAmixerItemTypes
-};
-
-#define NB_AMIXER_AMEND (AmixerAmendEnd - AmixerAmend1 + 1)
+/**
+ * Alsa subsystem builder
+ * This function is called when the PFW parses a subsystem structure XML of type "ALSA".
+ * It will then create an Amixer Subsystem
+ *
+ * @param[in] subsystemLibrary the pointer on the subsystem library
+ */
+void getALSASubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
+{
+    subsystemLibrary->addElementBuilder(
+        "ALSA", new TNamedElementBuilderTemplate<LegacyAlsaSubsystem>
+        );
+}
+}

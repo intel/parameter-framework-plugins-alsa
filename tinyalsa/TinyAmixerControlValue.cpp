@@ -64,8 +64,8 @@ bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl,
 
         if (isDebugEnabled()) {
 
-            log_info("Reading alsa element %s,%d, index %u with value %u",
-                     getControlName().c_str(), getIndex(), elementNumber, value);
+            log_info("Reading alsa element %s, index %u with value %u",
+                     getControlName().c_str(), elementNumber, value);
         }
 
         toBlackboard(value);
@@ -90,8 +90,8 @@ bool TinyAmixerControlValue::writeControl(struct mixer_ctl *mixerControl,
 
         if (isDebugEnabled()) {
 
-            log_info("Writing alsa element %s,%d, index %u with value %u",
-                     getControlName().c_str(), getIndex(), elementNumber, value);
+            log_info("Writing alsa element %s, index %u with value %u",
+                     getControlName().c_str(), elementNumber, value);
         }
 
         // Write element

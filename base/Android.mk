@@ -28,21 +28,18 @@
 
 LOCAL_PATH := $(call my-dir)
 
+#######################################################################
+# libalsabase-subsystem (target build)
+
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := \
     AlsaSubsystemObject.cpp \
     AlsaCtlPortConfig.cpp \
     AmixerControl.cpp \
 
-LOCAL_C_INCLUDES := \
-    external/parameter-framework/core/parameter \
-    external/stlport/stlport \
-    bionic \
-
-LOCAL_SHARED_LIBRARIES := libstlport
-
 LOCAL_STATIC_LIBRARIES := \
-    libxmlserializer \
+    libparameter_includes \
+    libxmlserializer_includes \
 
 LOCAL_CFLAGS := \
     -Wall \
@@ -53,5 +50,7 @@ LOCAL_CFLAGS := \
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/parameter-framework-plugins/Audio
 LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := libalsa-subsystem
+LOCAL_MODULE := libalsabase-subsystem
+
+include external/stlport/libstlport.mk
 include $(BUILD_STATIC_LIBRARY)

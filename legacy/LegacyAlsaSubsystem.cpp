@@ -27,29 +27,34 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "SubsystemLibrary.h"
-#include "NamedElementBuilderTemplate.h"
-#include "AlsaCtlSubsystemTemplate.hpp"
-#include "TinyAlsaCtlPortConfig.hpp"
-#include "TinyAmixerControlArray.hpp"
-#include "TinyAmixerControlValue.hpp"
 
-extern "C"
+#include "LegacyAlsaSubsystem.hpp"
+#include "LegacyAmixerControl.hpp"
+#include "LegacyAlsaCtlPortConfig.hpp"
+#include "SubsystemObjectFactory.h"
+#include "AlsaMappingKeys.hpp"
+#include "AmixerMutableVolume.hpp"
+
+LegacyAlsaSubsystem::LegacyAlsaSubsystem(const string &name) : AlsaSubsystem(name)
 {
-/**
- * TinyAlsaCtl subsystem builder
- * This function is called when the PFW parses a subsystem structure XML of type "ALSACTL".
- * It will then create an TinyAlsaCtl Subsystem
- *
- * @param[in] subsystemLibrary the pointer on the subsystem library
- */
-void getTINYALSACTLSubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
-{
-    subsystemLibrary->addElementBuilder(
-        "ALSACTL",
-        new TNamedElementBuilderTemplate<AlsaCtlSubsystem<
-                                             TinyAmixerControlValue,
-                                             TinyAmixerControlArray,
-                                             TinyAlsaCtlPortConfig> > );
-}
+    // Provide creators to upper layer
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<LegacyAmixerControl>("Control", 1 << AlsaCard)
+        );
+
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<LegacyAmixerControl>(
+            "ByteControl", 1 << AlsaCard)
+        );
+
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<
+            AmixerMutableVolume<LegacyAmixerControl> >("Volume", 1 << AlsaCard)
+        );
+
+
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<LegacyAlsaCtlPortConfig>(
+            "PortConfig", (1 << AlsaCard) | (1 << AlsaCtlDevice))
+        );
 }

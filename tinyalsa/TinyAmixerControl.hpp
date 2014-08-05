@@ -67,6 +67,15 @@ protected:
     virtual bool accessHW(bool receive, string &error);
 
     /**
+     * Get the number of values in a mixer control
+     *
+     * @param[in] mixerControl handle on the mixer control
+     *
+     * @return the number of values
+     */
+    virtual uint32_t getNumValues(struct mixer_ctl *mixerControl);
+
+    /**
      * Reads the value(s) of an alsa mixer
      *
      * @param[in] mixerControl handle on the mixer control

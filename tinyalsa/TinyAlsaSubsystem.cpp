@@ -27,14 +27,61 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#pragma once
 
-#include "AmixerMappingKeys.hpp"
+#include "TinyAlsaSubsystem.hpp"
+#include "TinyAmixerControlArray.hpp"
+#include "TinyAmixerControlValue.hpp"
+#include "TinyAlsaCtlPortConfig.hpp"
+#include "SubsystemObjectFactory.h"
+#include "AlsaMappingKeys.hpp"
+#include "AmixerMutableVolume.hpp"
 
-/** Mapping item types */
-enum AlsaCtlltemType
+TinyAlsaSubsystem::TinyAlsaSubsystem(const string &name) : AlsaSubsystem(name), mMixers()
 {
-    AlsaCtlDevice = NbAmixerItemTypes,
+    // Provide creators to upper layer
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<TinyAmixerControlValue>("Control", 1 << AlsaCard)
+        );
 
-    NbAlsaCtlItemTypes
-};
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<TinyAmixerControlArray>(
+            "ByteControl", 1 << AlsaCard)
+        );
+
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<
+            AmixerMutableVolume<TinyAmixerControlValue> >("Volume", 1 << AlsaCard)
+        );
+
+
+    addSubsystemObjectFactory(
+        new TSubsystemObjectFactory<TinyAlsaCtlPortConfig>(
+            "PortConfig", (1 << AlsaCard) | (1 << AlsaCtlDevice))
+        );
+}
+
+TinyAlsaSubsystem::~TinyAlsaSubsystem()
+{
+    MixerMap::const_iterator it;
+
+    for (it = mMixers.begin(); it != mMixers.end(); ++it) {
+        mixer_close(it->second);
+    }
+}
+
+struct mixer *TinyAlsaSubsystem::getMixerHandle(int32_t cardNumber)
+{
+    MixerMap::const_iterator it = mMixers.find(cardNumber);
+    if (it != mMixers.end()) {
+        return it->second;
+    }
+
+    // create handle
+    struct mixer *newMixer = mixer_open(cardNumber);
+    if (newMixer == NULL) {
+        return NULL;
+    }
+    mMixers.insert(std::make_pair(cardNumber, newMixer));
+
+    return newMixer;
+}

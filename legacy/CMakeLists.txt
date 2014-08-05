@@ -26,48 +26,20 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-LOCAL_PATH := $(call my-dir)
+add_library(alsa-subsystem SHARED
+    LegacyAlsaSubsystem.cpp
+    LegacyAlsaSubsystemBuilder.cpp
+    LegacyAmixerControl.cpp
+    LegacyAlsaCtlPortConfig.cpp)
 
-ifeq ($(PFW_LEGACY_ALSA),true)
+include_directories(
+    ${PFW_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/base
+    ${PROJECT_SOURCE_DIR}/legacy)
 
-#######################################################################
-# libalsactl-subsystem
+target_link_libraries(alsa-subsystem
+    alsabase-subsystem
+    ${ALSA_LIBRARIES}
+    ${PFW_LIBRARIES})
 
-include $(CLEAR_VARS)
-
-LOCAL_SRC_FILES := \
-    LegacyAlsaCtlSubsystemBuilder.cpp \
-    LegacyAlsaCtlPortConfig.cpp
-
-LOCAL_C_INCLUDES := \
-    external/parameter-framework/core/parameter \
-    external/alsa-lib/include \
-    external/stlport/stlport \
-    bionic/
-
-LOCAL_SHARED_LIBRARIES := \
-    libparameter \
-    libstlport \
-    libicuuc \
-    libasound \
-    libamixer-subsystem \
-
-LOCAL_STATIC_LIBRARIES := \
-    libalsa-subsystem \
-    libxmlserializer \
-    libxml2 \
-
-LOCAL_CFLAGS := \
-    -D_POSIX_C_SOURCE=200809 \
-    -Wall \
-    -Werror \
-    -Wextra \
-    -Wno-unused-parameter
-
-LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/parameter-framework-plugins/Audio
-LOCAL_MODULE := libalsactl-subsystem
-LOCAL_MODULE_TAGS := optional
-
-include $(BUILD_SHARED_LIBRARY)
-
-endif
+install(TARGETS alsa-subsystem LIBRARY DESTINATION lib)

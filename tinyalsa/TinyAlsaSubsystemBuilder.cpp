@@ -27,31 +27,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#pragma once
+#include "SubsystemLibrary.h"
+#include "NamedElementBuilderTemplate.h"
+#include "TinyAlsaSubsystem.hpp"
 
-#include "AlsaCtlMappingKeys.hpp"
-#include "SubsystemObjectFactory.h"
-#include "AmixerSubsystemTemplate.hpp"
-
-/**
- * Template class for Alsa port configuration subsystems.
- * This class is a template for alsa port configuration subsystems, it will be used by both legacy
- * alsa and tiny alsa subsystems.
- */
-template <class AmixerControlType, class AmixerByteControlType, class AlsaCtlPortConfigType>
-class AlsaCtlSubsystem : public AmixerSubsystem<AmixerControlType, AmixerByteControlType>
+extern "C"
 {
-public:
-    AlsaCtlSubsystem(const string &name)
-        : AmixerSubsystem<AmixerControlType, AmixerByteControlType>(name)
-    {
-        // Provide mapping keys to upper layer
-        this->addContextMappingKey("Device");
-
-        // Provide creators to upper layer
-        this->addSubsystemObjectFactory(
-            new TSubsystemObjectFactory<AlsaCtlPortConfigType>(
-                "PortConfig", (1 << AmixerCard) | (1 << AlsaCtlDevice))
-            );
-    }
-};
+/**
+ * TinyAmixer subsystem builder
+ * This function is called when the PFW parses a subsystem structure XML of type "ALSA".
+ * It will then create an TinyAMixer Subsystem
+ *
+ * @param[in] subsystemLibrary the pointer on the subsystem library
+ */
+void getTINYALSASubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
+{
+    subsystemLibrary->addElementBuilder(
+        "ALSA", new TNamedElementBuilderTemplate<TinyAlsaSubsystem>
+        );
+}
+}

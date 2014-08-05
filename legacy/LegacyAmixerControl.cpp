@@ -32,7 +32,7 @@
 #include "ParameterType.h"
 #include "BitParameterBlockType.h"
 #include "MappingContext.h"
-#include "AmixerMappingKeys.hpp"
+#include "AlsaMappingKeys.hpp"
 #include "AutoLog.h"
 #include <assert.h>
 #include <string.h>
@@ -62,14 +62,14 @@ LegacyAmixerControl::LegacyAmixerControl(
 
 bool LegacyAmixerControl::accessHW(bool receive, string &error)
 {
-    CAutoLog autoLog(getConfigurableElement(), "AMIXER", isDebugEnabled());
+    CAutoLog autoLog(getConfigurableElement(), "ALSA", isDebugEnabled());
 
 #ifdef SIMULATION
     if (receive) {
 
         memset(getBlackboardLocation(), 0, getSize());
     }
-    log_info("%s AMIXER Element Instance: %s\t\t(Control Element: %s)",
+    log_info("%s ALSA Element Instance: %s\t\t(Control Element: %s)",
              receive ? "Reading" : "Writing",
              getConfigurableElement()->getPath().c_str(),
              getControlName().c_str());
@@ -148,15 +148,10 @@ bool LegacyAmixerControl::accessHW(bool receive, string &error)
     // Init info id
     snd_ctl_elem_info_set_id(info, id);
 
-    if (hasIndex()) {
-
-        snd_ctl_elem_id_set_index(id, getIndex());
-    }
-
     // Get info
     if ((ret = snd_ctl_elem_info(sndCtrl, info)) < 0) {
 
-        error = "AMIXER: Unable to get element info " + controlName +
+        error = "ALSA: Unable to get element info " + controlName +
                 ": " + snd_strerror(ret);
 
         // Close sound control
@@ -175,7 +170,7 @@ bool LegacyAmixerControl::accessHW(bool receive, string &error)
     // If size defined in the PFW different from alsa mixer control size, return an error
     if (elementCount * scalarSize != getSize()) {
 
-        error = "AMIXER: Control element count (" + asString(elementCount) +
+        error = "ALSA: Control element count (" + asString(elementCount) +
                 ") and configurable scalar element count (" +
                 asString(getSize() / scalarSize) + ") mismatch";
 
@@ -192,7 +187,7 @@ bool LegacyAmixerControl::accessHW(bool receive, string &error)
         // Read element
         if ((ret = snd_ctl_elem_read(sndCtrl, control)) < 0) {
 
-            error = "AMIXER: Unable to read element " + controlName +
+            error = "ALSA: Unable to read element " + controlName +
                     ": " + snd_strerror(ret);
 
             // Close sound control
@@ -220,15 +215,15 @@ bool LegacyAmixerControl::accessHW(bool receive, string &error)
                 value = snd_ctl_elem_value_get_byte(control, index);
                 break;
             default:
-                error = "AMIXER: Unknown control element type while reading alsa element " +
+                error = "ALSA: Unknown control element type while reading alsa element " +
                         controlName;
                 return false;
             }
 
             if (isDebugEnabled()) {
 
-                log_info("Reading alsa element %s,%d, index %u with value %u",
-                         controlName.c_str(), getIndex(), index, value);
+                log_info("Reading alsa element %s, index %u with value %u",
+                         controlName.c_str(), index, value);
             }
 
             // Write data to blackboard (beware this code is OK on Little Endian machines only)
@@ -245,8 +240,8 @@ bool LegacyAmixerControl::accessHW(bool receive, string &error)
 
             if (isDebugEnabled()) {
 
-                log_info("Writing alsa element %s,%d, index %u with value %u",
-                         controlName.c_str(), getIndex(), index, value);
+                log_info("Writing alsa element %s, index %u with value %u",
+                         controlName.c_str(), index, value);
             }
 
             switch (eType) {
@@ -266,7 +261,7 @@ bool LegacyAmixerControl::accessHW(bool receive, string &error)
                 snd_ctl_elem_value_set_byte(control, index, value);
                 break;
             default:
-                error = "AMIXER: Unknown control element type while writing alsa element " +
+                error = "ALSA: Unknown control element type while writing alsa element " +
                         controlName;
                 return false;
             }
@@ -275,7 +270,7 @@ bool LegacyAmixerControl::accessHW(bool receive, string &error)
         // Write element
         if ((ret = snd_ctl_elem_write(sndCtrl, control)) < 0) {
 
-            error = "AMIXER: Unable to write element " + controlName +
+            error = "ALSA: Unable to write element " + controlName +
                     ": " + snd_strerror(ret);
 
 

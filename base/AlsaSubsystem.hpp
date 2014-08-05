@@ -29,45 +29,27 @@
  */
 #pragma once
 
-#include "TinyAmixerControl.hpp"
+#include "Subsystem.h"
 #include <string>
 
 /**
- * Class to handle alsa mixer controls of type BYTE.
+ * Base class for Alsa subsystems.
+ *
+ * It only defines which context mapping keys are to be supported by such
+ * plugins.
  */
-class TinyAmixerControlArray : public TinyAmixerControl
+class AlsaSubsystem : public CSubsystem
 {
 public:
-    /**
-     * TinyAMixerByteControl Class constructor
-     *
-     * @param[in] mappingValue instantiation mapping value
-     * @param[in] instanceConfigurableElement pointer to configurable element instance
-     * @param[in] context contains the context mappings
-     */
-    TinyAmixerControlArray(const string &mappingValue,
-                           CInstanceConfigurableElement *instanceConfigurableElement,
-                           const CMappingContext &context);
-
-protected:
-    virtual bool readControl(struct mixer_ctl *mixerControl,
-                             uint32_t elementCount,
-                             string &error);
-
-    virtual bool writeControl(struct mixer_ctl *mixerControl,
-                              uint32_t elementCount,
-                              string &error);
-
-private:
-    /**
-     * Log the values read or written in an alsa mixer BYTE control
-     *
-     * @param[in] receive a boolean indicating if we receive or send the values from/to tinyalsa
-     * @param[in] elementCount the number of element to log
-     */
-    void logControlValues(bool receive, uint32_t elementCount) const;
-
-private:
-    /** Scalar size for byte mixer controls */
-    static const uint32_t _byteScalarSize = 1;
+    AlsaSubsystem(const std::string &name) : CSubsystem(name)
+    {
+        // Provide mapping keys to upper layer
+        addContextMappingKey("Card");
+        addContextMappingKey("Debug");
+        addContextMappingKey("Device");
+        addContextMappingKey("Amend1");
+        addContextMappingKey("Amend2");
+        addContextMappingKey("Amend3");
+        addContextMappingKey("Amend4");
+    }
 };

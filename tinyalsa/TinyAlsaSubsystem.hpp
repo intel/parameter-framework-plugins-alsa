@@ -27,46 +27,28 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 #pragma once
 
-#include "Subsystem.h"
-#include "AmixerMappingKeys.hpp"
-#include "SubsystemObjectFactory.h"
-#include "AmixerMutableVolume.hpp"
+#include "AlsaSubsystem.hpp"
+#include <map>
+#include <tinyalsa/asoundlib.h>
 
-/**
- * Template class for Alsa mixer subsystems.
- * This class is a template for alsa mixer control subsystems, it will be used by both legacy alsa
- * and tiny alsa subsystems.
- */
-template <class AmixerControlType, class AmixerByteControlType>
-class AmixerSubsystem : public CSubsystem
+class TinyAlsaSubsystem : public AlsaSubsystem
 {
 public:
-    AmixerSubsystem(const string &name) : CSubsystem(name)
-    {
-        // Provide mapping keys to upper layer
-        addContextMappingKey("Card");
-        addContextMappingKey("Index");
-        addContextMappingKey("Debug");
-        addContextMappingKey("Amend1");
-        addContextMappingKey("Amend2");
-        addContextMappingKey("Amend3");
-        addContextMappingKey("Amend4");
+    TinyAlsaSubsystem(const string &name);
+    ~TinyAlsaSubsystem();
 
-        // Provide creators to upper layer
-        addSubsystemObjectFactory(
-            new TSubsystemObjectFactory<AmixerControlType>("Control", 1 << AmixerCard)
-            );
+    /**
+     * Return a handle to the card's mixer.
+     */
+    struct mixer *getMixerHandle(int32_t cardNumber);
 
-        addSubsystemObjectFactory(
-            new TSubsystemObjectFactory<AmixerByteControlType>(
-                "ByteControl", 1 << AmixerCard)
-            );
-
-        addSubsystemObjectFactory(
-            new TSubsystemObjectFactory<
-                AmixerMutableVolume<AmixerControlType> >("Volume", 1 << AmixerCard)
-            );
-    }
+private:
+    typedef std::map<int32_t, struct mixer *> MixerMap;
+    /**
+     * Cache to each card's mixer handle.
+     */
+    MixerMap mMixers;
 };

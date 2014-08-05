@@ -36,6 +36,8 @@
 #include <sstream>
 
 #define base TinyAmixerControl
+// Maximum characters per line
+#define maxLogLine 64
 
 TinyAmixerControlArray::TinyAmixerControlArray(
     const string &mappingValue,
@@ -45,22 +47,51 @@ TinyAmixerControlArray::TinyAmixerControlArray(
 {
 }
 
+int TinyAmixerControlArray::doGetArrayMixer(struct mixer_ctl *mixerControl,
+                                            void *array,
+                                            size_t elementCount)
+{
+    int ret = mixer_ctl_get_array(mixerControl, array, elementCount);
+
+    if (isDebugEnabled() && ret == 0) {
+        logControlValues(true, array, elementCount);
+    }
+
+    return ret;
+}
+
+int TinyAmixerControlArray::doSetArrayMixer(struct mixer_ctl *mixerControl,
+                                            const void *array,
+                                            size_t elementCount)
+{
+    if (isDebugEnabled()) {
+        logControlValues(false, array, elementCount);
+    }
+
+    return mixer_ctl_set_array(mixerControl, array, elementCount);
+}
+
+int TinyAmixerControlArray::getArrayMixer(struct mixer_ctl *mixerControl, uint32_t elementCount)
+{
+    return doGetArrayMixer(mixerControl, getBlackboardLocation(), elementCount);
+}
+
+int TinyAmixerControlArray::setArrayMixer(struct mixer_ctl *mixerControl, uint32_t elementCount)
+{
+    return doSetArrayMixer(mixerControl, getBlackboardLocation(), elementCount);
+}
+
 bool TinyAmixerControlArray::readControl(struct mixer_ctl *mixerControl,
                                          uint32_t elementCount,
                                          string &error)
 {
     int err;
 
-    if ((err = mixer_ctl_get_array(mixerControl, getBlackboardLocation(), elementCount)) < 0) {
+    if ((err = getArrayMixer(mixerControl, elementCount)) < 0) {
 
         error = "Failed to read value in mixer control: " + getControlName() + ": " +
                 strerror(-err);
         return false;
-    }
-
-    if (isDebugEnabled()) {
-
-        logControlValues(true, elementCount);
     }
 
     return true;
@@ -72,13 +103,8 @@ bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl,
 {
     int err;
 
-    if (isDebugEnabled()) {
-
-        logControlValues(false, elementCount);
-    }
-
     // Write element
-    if ((err = mixer_ctl_set_array(mixerControl, getBlackboardLocation(), elementCount)) < 0) {
+    if ((err = setArrayMixer(mixerControl, elementCount)) < 0) {
 
         error = "Failed to write value in mixer control: " + getControlName() + ": " +
                 strerror(-err);
@@ -88,23 +114,40 @@ bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl,
     return true;
 }
 
-void TinyAmixerControlArray::logControlValues(bool receive, uint32_t elementCount) const
+void TinyAmixerControlArray::displayAndCleanString(std::stringstream &stringValue) const
 {
-    const unsigned char *buffer =
-        reinterpret_cast<const unsigned char *>(getBlackboardLocation());
+    log_info("%s", stringValue.str().c_str());
+    stringValue.str(std::string());
+}
+
+void TinyAmixerControlArray::logControlValues(bool receive,
+                                              const void *array,
+                                              uint32_t elementCount) const
+{
+    const unsigned char *buffer = reinterpret_cast<const unsigned char *>(array);
     unsigned int idx;
     std::stringstream log;
 
     log << (receive ? "Reading" : "Writing");
-    log << " alsa element: " << getControlName() << " " << getIndex() << " with value: ";
+    log << " alsa element: " << getControlName() << " with value: ";
+    displayAndCleanString(log);
     for (idx = 0; idx < elementCount; idx++) {
         log.width(2);
         log.fill('0');
         // cast to uint16_t necessary in order to avoid 'buffer[idx]' to be
         // treated as a printable character, apparently
         log << hex << static_cast<unsigned short>(buffer[idx]) << " ";
+        if ((idx != 0) && ((idx % maxLogLine) == 0)) {
+            log << '\n';
+            displayAndCleanString(log);
+        }
     }
-    log << "[" << dec << elementCount << " bytes]" << endl;
 
-    log_info("%s", log.str().c_str());
+    if (log.str().length() > 0) {
+        log << '\n';
+        displayAndCleanString(log);
+    }
+
+    log << "[" << dec << elementCount << " bytes]" << endl;
+    displayAndCleanString(log);
 }
