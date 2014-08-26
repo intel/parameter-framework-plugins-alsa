@@ -65,6 +65,7 @@ LOCAL_CFLAGS += \
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/parameter-framework-plugins/Audio
 LOCAL_MODULE := libalsa-subsystem
+LOCAL_MODULE_OWNER := intel
 LOCAL_MODULE_TAGS := optional
 
 include external/stlport/libstlport.mk
