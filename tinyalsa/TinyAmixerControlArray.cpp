@@ -33,6 +33,7 @@
 #include <tinyalsa/asoundlib.h>
 #include <errno.h>
 #include <string.h>
+#include <string>
 #include <sstream>
 
 #define base TinyAmixerControl
@@ -40,7 +41,7 @@
 #define maxLogLine 64
 
 TinyAmixerControlArray::TinyAmixerControlArray(
-    const string &mappingValue,
+    const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
     const CMappingContext &context)
     : base(mappingValue, instanceConfigurableElement, context, _byteScalarSize)
@@ -83,7 +84,7 @@ int TinyAmixerControlArray::setArrayMixer(struct mixer_ctl *mixerControl, uint32
 
 bool TinyAmixerControlArray::readControl(struct mixer_ctl *mixerControl,
                                          uint32_t elementCount,
-                                         string &error)
+                                         std::string &error)
 {
     int err;
 
@@ -99,7 +100,7 @@ bool TinyAmixerControlArray::readControl(struct mixer_ctl *mixerControl,
 
 bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl,
                                           uint32_t elementCount,
-                                          string &error)
+                                          std::string &error)
 {
     int err;
 
@@ -136,7 +137,7 @@ void TinyAmixerControlArray::logControlValues(bool receive,
         log.fill('0');
         // cast to uint16_t necessary in order to avoid 'buffer[idx]' to be
         // treated as a printable character, apparently
-        log << hex << static_cast<unsigned short>(buffer[idx]) << " ";
+        log << std::hex << static_cast<unsigned short>(buffer[idx]) << " ";
         if ((idx != 0) && ((idx % maxLogLine) == 0)) {
             log << '\n';
             displayAndCleanString(log);
@@ -148,6 +149,6 @@ void TinyAmixerControlArray::logControlValues(bool receive,
         displayAndCleanString(log);
     }
 
-    log << "[" << dec << elementCount << " bytes]" << endl;
+    log << "[" << std::dec << elementCount << " bytes]" << std::endl;
     displayAndCleanString(log);
 }

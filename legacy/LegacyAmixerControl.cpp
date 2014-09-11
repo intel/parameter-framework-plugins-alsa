@@ -36,6 +36,7 @@
 #include "AutoLog.h"
 #include <assert.h>
 #include <string.h>
+#include <string>
 #include <errno.h>
 #include <ctype.h>
 #include <alsa/asoundlib.h>
@@ -52,7 +53,7 @@ int snd_ctl_hw_open(snd_ctl_t **handle, const char *name, int card, int mode);
 #define base AmixerControl
 
 LegacyAmixerControl::LegacyAmixerControl(
-    const string &mappingValue,
+    const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
     const CMappingContext &context)
     : base(mappingValue, instanceConfigurableElement, context)
@@ -60,7 +61,7 @@ LegacyAmixerControl::LegacyAmixerControl(
 
 }
 
-bool LegacyAmixerControl::accessHW(bool receive, string &error)
+bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 {
     CAutoLog autoLog(getConfigurableElement(), "ALSA", isDebugEnabled());
 
@@ -114,7 +115,7 @@ bool LegacyAmixerControl::accessHW(bool receive, string &error)
     }
 #else
     // Create device name
-    ostringstream deviceName;
+    std::ostringstream deviceName;
 
     deviceName << "hw:" << cardNumber;
 
@@ -135,7 +136,7 @@ bool LegacyAmixerControl::accessHW(bool receive, string &error)
     // Set interface
     snd_ctl_elem_id_set_interface(id, SND_CTL_ELEM_IFACE_MIXER);
 
-    string controlName = getControlName();
+    std::string controlName = getControlName();
 
     // Set name or id
     if (isdigit(controlName[0])) {

@@ -34,11 +34,12 @@
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <string>
 
 #define base TinyAmixerControl
 
 TinyAmixerControlValue::TinyAmixerControlValue(
-    const string &mappingValue,
+    const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
     const CMappingContext &context)
     : base(mappingValue, instanceConfigurableElement, context)
@@ -47,7 +48,7 @@ TinyAmixerControlValue::TinyAmixerControlValue(
 
 bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl,
                                          uint32_t elementCount,
-                                         string &error)
+                                         std::string &error)
 {
     uint32_t elementNumber;
 
@@ -75,7 +76,7 @@ bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl,
 
 bool TinyAmixerControlValue::writeControl(struct mixer_ctl *mixerControl,
                                           uint32_t elementCount,
-                                          string &error)
+                                          std::string &error)
 {
     uint32_t elementNumber;
 

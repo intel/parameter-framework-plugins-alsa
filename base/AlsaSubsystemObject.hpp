@@ -31,6 +31,7 @@
 
 #include "FormattedSubsystemObject.h"
 #include <stdint.h>
+#include <string>
 
 /**
  * Alsa subsystem object class.
@@ -39,10 +40,10 @@
 class AlsaSubsystemObject : public CFormattedSubsystemObject
 {
 public:
-    AlsaSubsystemObject(const string &mappingValue,
+    AlsaSubsystemObject(const std::string &mappingValue,
                         CInstanceConfigurableElement *instanceConfigurableElement,
                         const CMappingContext &context);
-    AlsaSubsystemObject(const string &strMappingValue,
+    AlsaSubsystemObject(const std::string &strMappingValue,
                         CInstanceConfigurableElement *instanceConfigurableElement,
                         uint32_t firstAmendKey,
                         uint32_t nbAmendKeys,
@@ -61,7 +62,7 @@ protected:
      *
      * @return the name of the alsa card
      */
-    const string &getCardName() const { return _cardName; }
+    const std::string &getCardName() const { return _cardName; }
 
 private:
     /**
@@ -71,12 +72,12 @@ private:
      *
      * @return the number of the corresponding alsa card
      */
-    static int getCardNumberByName(const string &cardName);
+    static int getCardNumberByName(const std::string &cardName);
 
     /** Path of the sound card in the file system */
     static const char _soundCardPath[];
     /** Card name to which the Alsa device belong */
-    string _cardName;
+    std::string _cardName;
     /** Card Index to which the Alsa device belong */
     int32_t _cardIndex;
 };

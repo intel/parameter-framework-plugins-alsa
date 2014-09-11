@@ -31,13 +31,14 @@
 #pragma once
 
 #include "AlsaSubsystem.hpp"
+#include <string>
 #include <map>
 #include <tinyalsa/asoundlib.h>
 
 class TinyAlsaSubsystem : public AlsaSubsystem
 {
 public:
-    TinyAlsaSubsystem(const string &name);
+    TinyAlsaSubsystem(const std::string &name);
     ~TinyAlsaSubsystem();
 
     /**

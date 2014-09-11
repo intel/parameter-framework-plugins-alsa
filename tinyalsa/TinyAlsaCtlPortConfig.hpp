@@ -45,13 +45,13 @@ public:
      * @param[in] instanceConfigurableElement pointer to configurable element instance
      * @param[in] context contains the context mappings
      */
-    TinyAlsaCtlPortConfig(const string &mappingValue,
+    TinyAlsaCtlPortConfig(const std::string &mappingValue,
                           CInstanceConfigurableElement *instanceConfigurableElement,
                           const CMappingContext &context);
 
 protected:
     // Stream operations
-    virtual bool doOpenStream(StreamDirection streamDirection, string &error);
+    virtual bool doOpenStream(StreamDirection streamDirection, std::string &error);
     virtual void doCloseStream(StreamDirection streamDirection);
 
 private:

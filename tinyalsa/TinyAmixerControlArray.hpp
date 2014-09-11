@@ -45,18 +45,18 @@ public:
      * @param[in] instanceConfigurableElement pointer to configurable element instance
      * @param[in] context contains the context mappings
      */
-    TinyAmixerControlArray(const string &mappingValue,
+    TinyAmixerControlArray(const std::string &mappingValue,
                            CInstanceConfigurableElement *instanceConfigurableElement,
                            const CMappingContext &context);
 
 protected:
     virtual bool readControl(struct mixer_ctl *mixerControl,
                              uint32_t elementCount,
-                             string &error);
+                             std::string &error);
 
     virtual bool writeControl(struct mixer_ctl *mixerControl,
                               uint32_t elementCount,
-                              string &error);
+                              std::string &error);
 
     /**
      * Derivable method for storing alsa ByteControls into blackboard

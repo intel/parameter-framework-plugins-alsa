@@ -46,7 +46,7 @@ public:
      * @param[in] instanceConfigurableElement pointer to configurable element instance
      * @param[in] context contains the context mappings
      */
-    TinyAmixerControl(const string &mappingValue,
+    TinyAmixerControl(const std::string &mappingValue,
                       CInstanceConfigurableElement *instanceConfigurableElement,
                       const CMappingContext &context);
 
@@ -58,13 +58,13 @@ public:
      * @param[in] context contains the context mappings
      * @param[in] scalarSize used to force scalarSize value
      */
-    TinyAmixerControl(const string &mappingValue,
+    TinyAmixerControl(const std::string &mappingValue,
                       CInstanceConfigurableElement *instanceConfigurableElement,
                       const CMappingContext &context,
                       uint32_t scalarSize);
 
 protected:
-    virtual bool accessHW(bool receive, string &error);
+    virtual bool accessHW(bool receive, std::string &error);
 
     /**
      * Get the number of values in a mixer control
@@ -86,7 +86,7 @@ protected:
      */
     virtual bool readControl(struct mixer_ctl *mixerControl,
                              uint32_t elementCount,
-                             string &error) = 0;
+                             std::string &error) = 0;
 
     /**
      * Writes the value(s) of an alsa mixer
@@ -99,5 +99,5 @@ protected:
      */
     virtual bool writeControl(struct mixer_ctl *mixerControl,
                               uint32_t elementCount,
-                              string &error) = 0;
+                              std::string &error) = 0;
 };

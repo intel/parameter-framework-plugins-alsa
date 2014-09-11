@@ -31,6 +31,7 @@
 #include "MappingContext.h"
 #include "AlsaMappingKeys.hpp"
 #include <string.h>
+#include <string>
 #include <alsa/asoundlib.h>
 #include <sstream>
 
@@ -46,7 +47,7 @@ const AlsaCtlPortConfig::PortConfig LegacyAlsaCtlPortConfig::_defaultPortConfig 
 const uint32_t LegacyAlsaCtlPortConfig::_latencyMicroSeconds = 500000;
 
 LegacyAlsaCtlPortConfig::LegacyAlsaCtlPortConfig(
-    const string &mappingValue,
+    const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
     const CMappingContext &context)
     :  base(mappingValue, instanceConfigurableElement, context, _defaultPortConfig)
@@ -56,10 +57,10 @@ LegacyAlsaCtlPortConfig::LegacyAlsaCtlPortConfig(
     _streamHandle[Capture] = NULL;
 
     // Retrieve card index
-    string cardIndex = context.getItem(AlsaCard);
+    std::string cardIndex = context.getItem(AlsaCard);
 
     // Create device name
-    ostringstream streamName;
+    std::ostringstream streamName;
 
     streamName << "hw:" << snd_card_get_index(cardIndex.c_str())
                << "," << context.getItem(AlsaCtlDevice);
@@ -68,7 +69,7 @@ LegacyAlsaCtlPortConfig::LegacyAlsaCtlPortConfig(
 
 }
 
-bool LegacyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, string &error)
+bool LegacyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, std::string &error)
 {
     snd_pcm_t *&streamHandle = _streamHandle[streamDirection];
     int32_t errorId;

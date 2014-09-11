@@ -72,7 +72,7 @@ public:
      * @param[in] instConfigElement pointer to configurable element instance
      * @param[in] context contains the context mappings
      */
-    AmixerMutableVolume(const string &mappingValue,
+    AmixerMutableVolume(const std::string &mappingValue,
                         CInstanceConfigurableElement *instConfigElement,
                         const CMappingContext &context)
         : SubsystemObjectBase(mappingValue, instConfigElement, context),

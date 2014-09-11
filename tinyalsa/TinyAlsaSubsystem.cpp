@@ -35,8 +35,9 @@
 #include "SubsystemObjectFactory.h"
 #include "AlsaMappingKeys.hpp"
 #include "AmixerMutableVolume.hpp"
+#include <string>
 
-TinyAlsaSubsystem::TinyAlsaSubsystem(const string &name) : AlsaSubsystem(name), mMixers()
+TinyAlsaSubsystem::TinyAlsaSubsystem(const std::string &name) : AlsaSubsystem(name), mMixers()
 {
     // Provide creators to upper layer
     addSubsystemObjectFactory(
