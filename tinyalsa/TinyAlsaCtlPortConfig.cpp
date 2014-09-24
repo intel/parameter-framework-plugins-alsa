@@ -91,7 +91,7 @@ bool TinyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, std::s
     // Check Format is supported by the plugin
     if (portConfig.format >= pcmFormatTranslationTableSize) {
 
-        error = "The format " + pcmFormatTranslationTable[portConfig.format].formatAsString +
+        error = "The format n°" + asString(portConfig.format) +
                 " is not supported by the TinyAlsa plugin";
         return false;
     }
