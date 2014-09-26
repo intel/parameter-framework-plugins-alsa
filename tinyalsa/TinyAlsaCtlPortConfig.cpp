@@ -43,17 +43,17 @@ const int TinyAlsaCtlPortConfig::_nbRingBuffer = 2;
 const AlsaCtlPortConfig::FormatTranslation pcmFormatTranslationTable[] = {
 
     // TinyAlsa Value,                               // Litteral Value,     // Alsa Value
-    { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_S8" },     // SND_PCM_FORMAT_S8
-    { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_U8" },     // SND_PCM_FORMAT_U8
-    { PCM_FORMAT_S16_LE                        ,    "PCM_FORMAT_S16_LE" }, // SND_PCM_FORMAT_S16_LE
-    { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_S16_BE" }, // SND_PCM_FORMAT_S16_BE
-    { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_U16_LE" }, // SND_PCM_FORMAT_U16_LE
-    { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_U16_BE" }, // SND_PCM_FORMAT_U16_BE
-    { PCM_FORMAT_S24_LE                        ,    "PCM_FORMAT_S24_LE" }, // SND_PCM_FORMAT_S24_LE
-    { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_S24_BE" }, // SND_PCM_FORMAT_S24_BE
-    { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_U24_LE" }, // SND_PCM_FORMAT_U24_LE
-    { AlsaCtlPortConfig::_tinyAlsaFormatInvalid,    "PCM_FORMAT_U24_BE" }, // SND_PCM_FORMAT_U24_BE
-    { PCM_FORMAT_S32_LE                        ,    "PCM_FORMAT_S32_LE" }  // SND_PCM_FORMAT_S32_LE
+    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_S8" },     // SND_PCM_FORMAT_S8
+    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_U8" },     // SND_PCM_FORMAT_U8
+    { PCM_FORMAT_S16_LE                  ,    "PCM_FORMAT_S16_LE" }, // SND_PCM_FORMAT_S16_LE
+    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_S16_BE" }, // SND_PCM_FORMAT_S16_BE
+    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_U16_LE" }, // SND_PCM_FORMAT_U16_LE
+    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_U16_BE" }, // SND_PCM_FORMAT_U16_BE
+    { PCM_FORMAT_S24_LE                  ,    "PCM_FORMAT_S24_LE" }, // SND_PCM_FORMAT_S24_LE
+    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_S24_BE" }, // SND_PCM_FORMAT_S24_BE
+    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_U24_LE" }, // SND_PCM_FORMAT_U24_LE
+    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_U24_BE" }, // SND_PCM_FORMAT_U24_BE
+    { PCM_FORMAT_S32_LE                  ,    "PCM_FORMAT_S32_LE" }  // SND_PCM_FORMAT_S32_LE
 };
 
 const size_t pcmFormatTranslationTableSize =
@@ -96,10 +96,10 @@ bool TinyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, std::s
         return false;
     }
 
-    int8_t format = pcmFormatTranslationTable[portConfig.format].formatAsNumerical;
+    uint8_t format = pcmFormatTranslationTable[portConfig.format].formatAsNumerical;
 
     // Check format is supported by Tinyalsa
-    if (format < 0) {
+    if (format == std::numeric_limits<uint8_t>::max()) {
 
         error = "The format " + pcmFormatTranslationTable[portConfig.format].formatAsString +
                 " is not supported by Tinyalsa";

@@ -40,8 +40,6 @@ using std::string;
 
 #define base AlsaSubsystemObject
 
-const uint8_t AlsaCtlPortConfig::_tinyAlsaFormatInvalid = std::numeric_limits<uint8_t>::max();
-
 AlsaCtlPortConfig::AlsaCtlPortConfig(const string &mappingValue,
                                      CInstanceConfigurableElement *instanceConfigurableElement,
                                      const CMappingContext &context,

@@ -63,9 +63,6 @@ public:
                       const CMappingContext &context,
                       const PortConfig &defaultPortConfig);
 
-    /** Invalid TinyAlsa format for the SFormatTranslation table */
-    static const uint8_t _tinyAlsaFormatInvalid;
-
 protected:
     // Sync to/from HW
     virtual bool receiveFromHW(std::string &error);
