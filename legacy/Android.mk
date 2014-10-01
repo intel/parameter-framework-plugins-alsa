@@ -63,7 +63,6 @@ LOCAL_CFLAGS += \
     -Wextra \
     -Wno-unused-parameter    # Needed to workaround STL bug
 
-LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/parameter-framework-plugins/Audio
 LOCAL_MODULE := libalsa-subsystem
 LOCAL_MODULE_TAGS := optional
 
