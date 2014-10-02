@@ -71,12 +71,12 @@ int TinyAmixerControlArray::doSetArrayMixer(struct mixer_ctl *mixerControl,
     return mixer_ctl_set_array(mixerControl, array, elementCount);
 }
 
-int TinyAmixerControlArray::getArrayMixer(struct mixer_ctl *mixerControl, uint32_t elementCount)
+int TinyAmixerControlArray::getArrayMixer(struct mixer_ctl *mixerControl, size_t elementCount)
 {
     return doGetArrayMixer(mixerControl, getBlackboardLocation(), elementCount);
 }
 
-int TinyAmixerControlArray::setArrayMixer(struct mixer_ctl *mixerControl, uint32_t elementCount)
+int TinyAmixerControlArray::setArrayMixer(struct mixer_ctl *mixerControl, size_t elementCount)
 {
     return doSetArrayMixer(mixerControl, getBlackboardLocation(), elementCount);
 }
