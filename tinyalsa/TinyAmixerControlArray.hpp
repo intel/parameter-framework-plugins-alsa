@@ -51,11 +51,11 @@ public:
 
 protected:
     virtual bool readControl(struct mixer_ctl *mixerControl,
-                             uint32_t elementCount,
+                             size_t elementCount,
                              std::string &error);
 
     virtual bool writeControl(struct mixer_ctl *mixerControl,
-                              uint32_t elementCount,
+                              size_t elementCount,
                               std::string &error);
 
     /**
@@ -105,7 +105,7 @@ private:
      * @param[in] receive a boolean indicating if we receive or send the values from/to tinyalsa
      * @param[in] elementCount the number of element to log
      */
-    void logControlValues(bool receive, const void *array, uint32_t elementCount) const;
+    void logControlValues(bool receive, const void *array, size_t elementCount) const;
     /**
      * Method for displaying and cleaning stringstream objects
      *

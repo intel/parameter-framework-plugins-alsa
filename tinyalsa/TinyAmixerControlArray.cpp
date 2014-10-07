@@ -83,7 +83,7 @@ int TinyAmixerControlArray::setArrayMixer(struct mixer_ctl *mixerControl, size_t
 }
 
 bool TinyAmixerControlArray::readControl(struct mixer_ctl *mixerControl,
-                                         uint32_t elementCount,
+                                         size_t elementCount,
                                          std::string &error)
 {
     int err;
@@ -99,7 +99,7 @@ bool TinyAmixerControlArray::readControl(struct mixer_ctl *mixerControl,
 }
 
 bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl,
-                                          uint32_t elementCount,
+                                          size_t elementCount,
                                           std::string &error)
 {
     int err;
@@ -123,7 +123,7 @@ void TinyAmixerControlArray::displayAndCleanString(std::stringstream &stringValu
 
 void TinyAmixerControlArray::logControlValues(bool receive,
                                               const void *array,
-                                              uint32_t elementCount) const
+                                              size_t elementCount) const
 {
     const unsigned char *buffer = reinterpret_cast<const unsigned char *>(array);
     unsigned int idx;

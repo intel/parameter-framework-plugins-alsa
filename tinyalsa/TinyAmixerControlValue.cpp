@@ -47,7 +47,7 @@ TinyAmixerControlValue::TinyAmixerControlValue(
 }
 
 bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl,
-                                         uint32_t elementCount,
+                                         size_t elementCount,
                                          std::string &error)
 {
     uint32_t elementNumber;
@@ -75,7 +75,7 @@ bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl,
 }
 
 bool TinyAmixerControlValue::writeControl(struct mixer_ctl *mixerControl,
-                                          uint32_t elementCount,
+                                          size_t elementCount,
                                           std::string &error)
 {
     uint32_t elementNumber;
