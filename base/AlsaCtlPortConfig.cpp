@@ -31,13 +31,16 @@
 #include "MappingContext.h"
 #include "AlsaMappingKeys.hpp"
 #include <string.h>
+#include <string>
 #include <assert.h>
 #include <sstream>
 #include <limits>
 
+using std::string;
+
 #define base AlsaSubsystemObject
 
-const uint8_t AlsaCtlPortConfig::_tinyAlsaFormatInvalid = numeric_limits<uint8_t>::max();
+const uint8_t AlsaCtlPortConfig::_tinyAlsaFormatInvalid = std::numeric_limits<uint8_t>::max();
 
 AlsaCtlPortConfig::AlsaCtlPortConfig(const string &mappingValue,
                                      CInstanceConfigurableElement *instanceConfigurableElement,
@@ -144,7 +147,7 @@ string AlsaCtlPortConfig::formatAlsaError(StreamDirection streamDirection,
                                           const string &functionName,
                                           const string &error)
 {
-    ostringstream stringStream;
+    std::ostringstream stringStream;
 
     stringStream << (streamDirection ? "Capture" : "Playback") << " " <<
         functionName << " error: " << error;

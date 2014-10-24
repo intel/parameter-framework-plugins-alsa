@@ -31,6 +31,7 @@
 
 #include "AlsaSubsystemObject.hpp"
 #include <stdint.h>
+#include <string>
 
 /**
  * Port configuration for alsa device class.
@@ -54,10 +55,10 @@ public:
     struct FormatTranslation
     {
         uint8_t formatAsNumerical; /**< Tiny alsa format value */
-        string formatAsString; /**< Litteral value */
+        std::string formatAsString; /**< Litteral value */
     };
 
-    AlsaCtlPortConfig(const string &mappingValue,
+    AlsaCtlPortConfig(const std::string &mappingValue,
                       CInstanceConfigurableElement *instanceConfigurableElement,
                       const CMappingContext &context,
                       const PortConfig &defaultPortConfig);
@@ -67,8 +68,8 @@ public:
 
 protected:
     // Sync to/from HW
-    virtual bool receiveFromHW(string &error);
-    virtual bool sendToHW(string &error);
+    virtual bool receiveFromHW(std::string &error);
+    virtual bool sendToHW(std::string &error);
 
     enum StreamDirection
     {
@@ -88,7 +89,7 @@ protected:
      *
      * @return true or false in case of failure
      */
-    virtual bool doOpenStream(StreamDirection streamDirection, string &error) = 0;
+    virtual bool doOpenStream(StreamDirection streamDirection, std::string &error) = 0;
 
     /**
      * Close a stream
@@ -121,9 +122,9 @@ protected:
      *
      * @return the string containing the error formatted
      */
-    string formatAlsaError(StreamDirection streamDirection,
-                           const string &functionName,
-                           const string &error);
+    std::string formatAlsaError(StreamDirection streamDirection,
+                           const std::string &functionName,
+                           const std::string &error);
 
 private:
     /**
@@ -134,7 +135,7 @@ private:
      *
      * @return true or false in case of failure
      */
-    bool updateStream(StreamDirection streamDirection, string &error);
+    bool updateStream(StreamDirection streamDirection, std::string &error);
 
     /**
      * Check if the stream is enabled.
@@ -154,7 +155,7 @@ private:
      *
      * @return success/failure
      */
-    bool openStream(StreamDirection streamDirection, string &error);
+    bool openStream(StreamDirection streamDirection, std::string &error);
 
     /**
      * Close the stream if needed.

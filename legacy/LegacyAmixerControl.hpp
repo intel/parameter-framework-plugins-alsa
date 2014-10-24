@@ -31,6 +31,7 @@
 
 #include "AmixerControl.hpp"
 #include <stdint.h>
+#include <string>
 
 class LegacyAmixerControl : public AmixerControl
 {
@@ -42,10 +43,10 @@ public:
      * @param[in] instanceConfigurableElement pointer to configurable element instance
      * @param[in] context contains the context mappings
      */
-    LegacyAmixerControl(const string &mappingValue,
+    LegacyAmixerControl(const std::string &mappingValue,
                         CInstanceConfigurableElement *instanceConfigurableElement,
                         const CMappingContext &context);
 
 protected:
-    virtual bool accessHW(bool receive, string &error);
+    virtual bool accessHW(bool receive, std::string &error);
 };

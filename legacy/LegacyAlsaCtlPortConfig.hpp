@@ -31,6 +31,7 @@
 
 #include "AlsaCtlPortConfig.hpp"
 #include <stdint.h>
+#include <string>
 
 struct _snd_pcm;
 
@@ -44,13 +45,13 @@ public:
      * @param[in] instanceConfigurableElement pointer to configurable element instance
      * @param[in] context contains the context mappings
      */
-    LegacyAlsaCtlPortConfig(const string &mappingValue,
+    LegacyAlsaCtlPortConfig(const std::string &mappingValue,
                             CInstanceConfigurableElement *instanceConfigurableElement,
                             const CMappingContext &context);
 
 protected:
     // Stream operations
-    virtual bool doOpenStream(StreamDirection streamDirection, string &error);
+    virtual bool doOpenStream(StreamDirection streamDirection, std::string &error);
     virtual void doCloseStream(StreamDirection streamDirection);
 
 private:
@@ -59,7 +60,7 @@ private:
     /** Latency */
     static const uint32_t _latencyMicroSeconds;
     /** Stream Name */
-    string _streamName;
+    std::string _streamName;
 
     /**
      * Stream handles.

@@ -31,9 +31,10 @@
 #pragma once
 
 #include "AlsaSubsystem.hpp"
+#include <string>
 
 class LegacyAlsaSubsystem : public AlsaSubsystem
 {
 public:
-    LegacyAlsaSubsystem(const string &name);
+    LegacyAlsaSubsystem(const std::string &name);
 };

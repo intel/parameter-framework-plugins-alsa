@@ -34,8 +34,9 @@
 #include "SubsystemObjectFactory.h"
 #include "AlsaMappingKeys.hpp"
 #include "AmixerMutableVolume.hpp"
+#include <string>
 
-LegacyAlsaSubsystem::LegacyAlsaSubsystem(const string &name) : AlsaSubsystem(name)
+LegacyAlsaSubsystem::LegacyAlsaSubsystem(const std::string &name) : AlsaSubsystem(name)
 {
     // Provide creators to upper layer
     addSubsystemObjectFactory(

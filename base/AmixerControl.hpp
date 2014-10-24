@@ -30,6 +30,7 @@
 #pragma once
 
 #include "AlsaSubsystemObject.hpp"
+#include <string>
 
 class CInstanceConfigurableElement;
 class CMappingContext;
@@ -49,7 +50,7 @@ public:
      * @param[in] instanceConfigurableElement pointer to configurable element instance
      * @param[in] context contains the context mappings
      */
-    AmixerControl(const string &mappingValue,
+    AmixerControl(const std::string &mappingValue,
                   CInstanceConfigurableElement *instanceConfigurableElement,
                   const CMappingContext &context);
 
@@ -61,12 +62,12 @@ public:
      * @param[in] context contains the context mappings
      * @param[in] scalarSize used to force scalarSize value
      */
-    AmixerControl(const string &mappingValue,
+    AmixerControl(const std::string &mappingValue,
                   CInstanceConfigurableElement *instanceConfigurableElement,
                   const CMappingContext &context, uint32_t scalarSize);
 
 protected:
-    virtual bool accessHW(bool receive, string &error) = 0;
+    virtual bool accessHW(bool receive, std::string &error) = 0;
 
     /**
      * Logging Control Info
@@ -82,7 +83,7 @@ protected:
      *
      * @return the name of the control
      */
-    const string getControlName() const { return getFormattedMappingValue(); }
+    const std::string getControlName() const { return getFormattedMappingValue(); }
 
     /**
      * Get the parameter scalar size for elementary access

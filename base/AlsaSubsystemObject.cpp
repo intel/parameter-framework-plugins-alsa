@@ -35,6 +35,9 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include <string>
+
+using std::string;
 
 #define base CFormattedSubsystemObject
 

@@ -37,12 +37,13 @@
 #include "AlsaMappingKeys.hpp"
 #include "AutoLog.h"
 #include <string.h>
+#include <string>
 #include <ctype.h>
 #include <algorithm>
 
 #define base AlsaSubsystemObject
 
-AmixerControl::AmixerControl(const string &mappingValue,
+AmixerControl::AmixerControl(const std::string &mappingValue,
                              CInstanceConfigurableElement *instanceConfigurableElement,
                              const CMappingContext &context)
     : base(mappingValue, instanceConfigurableElement,
@@ -95,7 +96,7 @@ AmixerControl::AmixerControl(const string &mappingValue,
     }
 }
 
-AmixerControl::AmixerControl(const string &mappingValue,
+AmixerControl::AmixerControl(const std::string &mappingValue,
                              CInstanceConfigurableElement *instanceConfigurableElement,
                              const CMappingContext &context, uint32_t scalarSize)
     : base(mappingValue, instanceConfigurableElement,
@@ -112,7 +113,7 @@ void AmixerControl::logControlInfo(bool receive) const
 {
     if (_isDebugEnabled) {
 
-        string controlName = getFormattedMappingValue();
+        std::string controlName = getFormattedMappingValue();
         log_info("%s ALSA Element Instance: %s\t\t(Control Element: %s)",
                  receive ? "Reading" : "Writing",
                  getConfigurableElement()->getPath().c_str(), controlName.c_str());

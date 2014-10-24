@@ -31,8 +31,8 @@
 #include "MappingContext.h"
 #include "AlsaMappingKeys.hpp"
 
-#include <string.h>
 #include <tinyalsa/asoundlib.h>
+#include <string>
 #include <sstream>
 
 #define base AlsaCtlPortConfig
@@ -67,7 +67,7 @@ const AlsaCtlPortConfig::PortConfig TinyAlsaCtlPortConfig::_defaultPortConfig = 
 };
 
 TinyAlsaCtlPortConfig::TinyAlsaCtlPortConfig(
-    const string &mappingValue,
+    const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
     const CMappingContext &context)
     : base(mappingValue, instanceConfigurableElement, context, _defaultPortConfig)
@@ -77,7 +77,7 @@ TinyAlsaCtlPortConfig::TinyAlsaCtlPortConfig(
     _streamHandle[Capture] = NULL;
 }
 
-bool TinyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, string &error)
+bool TinyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, std::string &error)
 {
     struct pcm *&streamHandle = _streamHandle[streamDirection];
     struct pcm_config pcmConfig;
