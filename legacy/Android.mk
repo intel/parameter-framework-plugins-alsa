@@ -64,6 +64,7 @@ LOCAL_CFLAGS += \
     -Wno-unused-parameter    # Needed to workaround STL bug
 
 LOCAL_MODULE := libalsa-subsystem
+LOCAL_MODULE_OWNER := intel
 LOCAL_MODULE_TAGS := optional
 
 include external/stlport/libstlport.mk

@@ -51,6 +51,7 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/parameter-framework-plugins/Audio
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libalsabase-subsystem
+LOCAL_MODULE_OWNER := intel
 
 include external/stlport/libstlport.mk
 include $(BUILD_STATIC_LIBRARY)

@@ -62,6 +62,7 @@ LOCAL_CFLAGS += \
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libtinyalsa-subsystem
+LOCAL_MODULE_OWNER := intel
 
 include external/stlport/libstlport.mk
 include $(BUILD_SHARED_LIBRARY)
