@@ -41,7 +41,7 @@
 class AlsaSubsystem : public CSubsystem
 {
 public:
-    AlsaSubsystem(const std::string &name) : CSubsystem(name)
+    AlsaSubsystem(const std::string &name, core::log::Logger& logger) : CSubsystem(name, logger)
     {
         // Provide mapping keys to upper layer
         addContextMappingKey("Card");

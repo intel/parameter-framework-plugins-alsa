@@ -36,7 +36,8 @@
 #include "AmixerMutableVolume.hpp"
 #include <string>
 
-LegacyAlsaSubsystem::LegacyAlsaSubsystem(const std::string &name) : AlsaSubsystem(name)
+LegacyAlsaSubsystem::LegacyAlsaSubsystem(const std::string &name, core::log::Logger& logger) :
+    AlsaSubsystem(name, logger)
 {
     // Provide creators to upper layer
     addSubsystemObjectFactory(

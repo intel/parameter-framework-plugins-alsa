@@ -31,7 +31,6 @@
 #include "TinyAlsaSubsystem.hpp"
 #include "InstanceConfigurableElement.h"
 #include "MappingContext.h"
-#include "AutoLog.h"
 #include <tinyalsa/asoundlib.h>
 #include <string>
 #include <string.h>
@@ -47,8 +46,9 @@ extern "C" void __gcov_flush();
 
 TinyAmixerControl::TinyAmixerControl(const std::string &mappingValue,
                                      CInstanceConfigurableElement *instanceConfigurableElement,
-                                     const CMappingContext &context)
-    : base(mappingValue, instanceConfigurableElement, context)
+                                     const CMappingContext &context,
+                                     core::log::Logger& logger)
+    : base(mappingValue, instanceConfigurableElement, context, logger)
 {
 #ifdef __USE_GCOV__
     atexit(__gcov_flush);
@@ -57,8 +57,10 @@ TinyAmixerControl::TinyAmixerControl(const std::string &mappingValue,
 
 TinyAmixerControl::TinyAmixerControl(const std::string &mappingValue,
                                      CInstanceConfigurableElement *instanceConfigurableElement,
-                                     const CMappingContext &context, uint32_t scalarSize)
-    : base(mappingValue, instanceConfigurableElement, context, scalarSize)
+                                     const CMappingContext &context,
+                                     core::log::Logger& logger,
+                                     uint32_t scalarSize)
+    : base(mappingValue, instanceConfigurableElement, context, logger, scalarSize)
 {
 }
 
@@ -69,8 +71,6 @@ uint32_t TinyAmixerControl::getNumValues(struct mixer_ctl *mixerControl)
 
 bool TinyAmixerControl::accessHW(bool receive, std::string &error)
 {
-    CAutoLog autoLog(getConfigurableElement(), "ALSA", isDebugEnabled());
-
     // Mixer handle
     struct mixer *mixer;
     // Mixer control handle

@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "SubsystemLibrary.h"
-#include "NamedElementBuilderTemplate.h"
+#include "LoggingElementBuilderTemplate.h"
 #include "LegacyAlsaSubsystem.hpp"
 #include "LegacyAmixerControl.hpp"
 
@@ -41,10 +41,10 @@ extern "C"
  *
  * @param[in] subsystemLibrary the pointer on the subsystem library
  */
-void getALSASubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
+void getALSASubsystemBuilder(CSubsystemLibrary *subsystemLibrary, core::log::Logger& logger)
 {
     subsystemLibrary->addElementBuilder(
-        "ALSA", new TNamedElementBuilderTemplate<LegacyAlsaSubsystem>
+        "ALSA", new TLoggingElementBuilderTemplate<LegacyAlsaSubsystem>(logger)
         );
 }
 }

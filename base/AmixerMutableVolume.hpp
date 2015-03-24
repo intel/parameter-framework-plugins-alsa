@@ -74,8 +74,9 @@ public:
      */
     AmixerMutableVolume(const std::string &mappingValue,
                         CInstanceConfigurableElement *instConfigElement,
-                        const CMappingContext &context)
-        : SubsystemObjectBase(mappingValue, instConfigElement, context),
+                        const CMappingContext &context,
+                        core::log::Logger& logger)
+        : SubsystemObjectBase(mappingValue, instConfigElement, context, logger),
           _volumeLevelConfigurableElement(NULL)
     {
         if ((instConfigElement->getType() == CInstanceConfigurableElement::EParameterBlock) &&

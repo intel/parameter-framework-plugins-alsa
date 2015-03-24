@@ -52,7 +52,8 @@ public:
      */
     AmixerControl(const std::string &mappingValue,
                   CInstanceConfigurableElement *instanceConfigurableElement,
-                  const CMappingContext &context);
+                  const CMappingContext &context,
+                  core::log::Logger& logger);
 
     /**
      * AmixerControl Class constructor
@@ -64,7 +65,9 @@ public:
      */
     AmixerControl(const std::string &mappingValue,
                   CInstanceConfigurableElement *instanceConfigurableElement,
-                  const CMappingContext &context, uint32_t scalarSize);
+                  const CMappingContext &context,
+                  core::log::Logger& logger,
+                  uint32_t scalarSize);
 
 protected:
     virtual bool accessHW(bool receive, std::string &error) = 0;

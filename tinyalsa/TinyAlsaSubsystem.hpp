@@ -38,7 +38,7 @@
 class TinyAlsaSubsystem : public AlsaSubsystem
 {
 public:
-    TinyAlsaSubsystem(const std::string &name);
+    TinyAlsaSubsystem(const std::string &name, core::log::Logger& logger);
     ~TinyAlsaSubsystem();
 
     /**

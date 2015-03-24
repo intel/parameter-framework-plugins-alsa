@@ -47,7 +47,8 @@ public:
      */
     TinyAlsaCtlPortConfig(const std::string &mappingValue,
                           CInstanceConfigurableElement *instanceConfigurableElement,
-                          const CMappingContext &context);
+                          const CMappingContext &context,
+                          core::log::Logger& logger);
 
 protected:
     // Stream operations

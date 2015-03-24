@@ -60,7 +60,8 @@ public:
 
     AlsaCtlPortConfig(const std::string &mappingValue,
                       CInstanceConfigurableElement *instanceConfigurableElement,
-                      const CMappingContext &context,
+                      const CMappingContext &contVext,
+                      core::log::Logger& logger,
                       const PortConfig &defaultPortConfig);
 
 protected:

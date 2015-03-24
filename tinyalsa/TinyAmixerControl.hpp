@@ -48,7 +48,8 @@ public:
      */
     TinyAmixerControl(const std::string &mappingValue,
                       CInstanceConfigurableElement *instanceConfigurableElement,
-                      const CMappingContext &context);
+                      const CMappingContext &context,
+                      core::log::Logger& logger);
 
     /**
      * TinyAMixerControl Class constructor
@@ -61,6 +62,7 @@ public:
     TinyAmixerControl(const std::string &mappingValue,
                       CInstanceConfigurableElement *instanceConfigurableElement,
                       const CMappingContext &context,
+                      core::log::Logger& logger,
                       uint32_t scalarSize);
 
 protected:

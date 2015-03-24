@@ -33,7 +33,6 @@
 #include "BitParameterBlockType.h"
 #include "MappingContext.h"
 #include "AlsaMappingKeys.hpp"
-#include "AutoLog.h"
 #include <assert.h>
 #include <string.h>
 #include <string>
@@ -55,25 +54,21 @@ int snd_ctl_hw_open(snd_ctl_t **handle, const char *name, int card, int mode);
 LegacyAmixerControl::LegacyAmixerControl(
     const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context)
-    : base(mappingValue, instanceConfigurableElement, context)
+    const CMappingContext &context,
+    core::log::Logger& logger)
+    : base(mappingValue, instanceConfigurableElement, context, logger)
 {
 
 }
 
 bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 {
-    CAutoLog autoLog(getConfigurableElement(), "ALSA", isDebugEnabled());
-
 #ifdef SIMULATION
     if (receive) {
 
         memset(getBlackboardLocation(), 0, getSize());
     }
-    log_info("%s ALSA Element Instance: %s\t\t(Control Element: %s)",
-             receive ? "Reading" : "Writing",
-             getConfigurableElement()->getPath().c_str(),
-             getControlName().c_str());
+    base::logControlInfo(receive);
 
     return true;
 #endif
@@ -223,8 +218,8 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 
             if (isDebugEnabled()) {
 
-                log_info("Reading alsa element %s, index %u with value %u",
-                         controlName.c_str(), index, value);
+                _logger.info() << "Writing alsa element " << controlName << ", index " << index
+                    << " with value " << value;
             }
 
             // Write data to blackboard (beware this code is OK on Little Endian machines only)
@@ -241,8 +236,8 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 
             if (isDebugEnabled()) {
 
-                log_info("Writing alsa element %s, index %u with value %u",
-                         controlName.c_str(), index, value);
+                _logger.info() << "Reading alsa element " << controlName << ", index " << index
+                    << " with value " << value;
             }
 
             switch (eType) {

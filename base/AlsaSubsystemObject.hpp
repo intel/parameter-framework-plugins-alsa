@@ -42,9 +42,11 @@ class AlsaSubsystemObject : public CFormattedSubsystemObject
 public:
     AlsaSubsystemObject(const std::string &mappingValue,
                         CInstanceConfigurableElement *instanceConfigurableElement,
-                        const CMappingContext &context);
+                        const CMappingContext &context,
+                        core::log::Logger& logger);
     AlsaSubsystemObject(const std::string &strMappingValue,
                         CInstanceConfigurableElement *instanceConfigurableElement,
+                        core::log::Logger& logger,
                         uint32_t firstAmendKey,
                         uint32_t nbAmendKeys,
                         const CMappingContext &context);
