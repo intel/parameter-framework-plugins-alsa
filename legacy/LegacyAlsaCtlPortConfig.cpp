@@ -49,8 +49,9 @@ const uint32_t LegacyAlsaCtlPortConfig::_latencyMicroSeconds = 500000;
 LegacyAlsaCtlPortConfig::LegacyAlsaCtlPortConfig(
     const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context)
-    :  base(mappingValue, instanceConfigurableElement, context, _defaultPortConfig)
+    const CMappingContext &context,
+    core::log::ILogger& logger)
+    :  base(mappingValue, instanceConfigurableElement, context, logger, _defaultPortConfig)
 {
     // Init stream handle array
     _streamHandle[Playback] = NULL;

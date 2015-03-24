@@ -47,7 +47,8 @@ public:
      */
     TinyAmixerControlValue(const std::string &mappingValue,
                            CInstanceConfigurableElement *instanceConfigurableElement,
-                           const CMappingContext &context);
+                           const CMappingContext &context,
+                           core::log::ILogger& logger);
 
 protected:
     virtual bool readControl(struct mixer_ctl *mixerControl,

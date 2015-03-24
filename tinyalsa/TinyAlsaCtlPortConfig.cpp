@@ -69,8 +69,9 @@ const AlsaCtlPortConfig::PortConfig TinyAlsaCtlPortConfig::_defaultPortConfig = 
 TinyAlsaCtlPortConfig::TinyAlsaCtlPortConfig(
     const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context)
-    : base(mappingValue, instanceConfigurableElement, context, _defaultPortConfig)
+    const CMappingContext &context,
+    core::log::ILogger& logger)
+    : base(mappingValue, instanceConfigurableElement, context, logger, _defaultPortConfig)
 {
     // Init stream handle array
     _streamHandle[Playback] = NULL;

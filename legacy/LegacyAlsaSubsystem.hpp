@@ -36,5 +36,5 @@
 class LegacyAlsaSubsystem : public AlsaSubsystem
 {
 public:
-    LegacyAlsaSubsystem(const std::string &name);
+    LegacyAlsaSubsystem(const std::string &name, core::log::ILogger& logger);
 };

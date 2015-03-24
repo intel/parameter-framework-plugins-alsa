@@ -37,7 +37,8 @@
 #include "AmixerMutableVolume.hpp"
 #include <string>
 
-TinyAlsaSubsystem::TinyAlsaSubsystem(const std::string &name) : AlsaSubsystem(name), mMixers()
+TinyAlsaSubsystem::TinyAlsaSubsystem(const std::string &name, core::log::ILogger& logger) :
+    AlsaSubsystem(name, logger), mMixers()
 {
     // Provide creators to upper layer
     addSubsystemObjectFactory(

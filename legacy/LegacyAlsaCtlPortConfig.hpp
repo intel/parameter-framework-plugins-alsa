@@ -47,7 +47,8 @@ public:
      */
     LegacyAlsaCtlPortConfig(const std::string &mappingValue,
                             CInstanceConfigurableElement *instanceConfigurableElement,
-                            const CMappingContext &context);
+                            const CMappingContext &context,
+                            core::log::ILogger& logger);
 
 protected:
     // Stream operations
