@@ -64,5 +64,6 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libtinyalsa-subsystem
 LOCAL_MODULE_OWNER := intel
 
-include external/stlport/libstlport.mk
+LOCAL_CLANG := true
+include external/libcxx/libcxx.mk
 include $(BUILD_SHARED_LIBRARY)
