@@ -67,7 +67,8 @@ LOCAL_MODULE := libalsa-subsystem
 LOCAL_MODULE_OWNER := intel
 LOCAL_MODULE_TAGS := optional
 
-include external/stlport/libstlport.mk
+LOCAL_CLANG := true
+include external/libcxx/libcxx.mk
 include $(BUILD_SHARED_LIBRARY)
 
 endif # $(PFW_LEGACY_ALSA)
