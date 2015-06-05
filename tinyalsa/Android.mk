@@ -54,6 +54,7 @@ LOCAL_STATIC_LIBRARIES := \
     libxmlserializer_includes \
 
 LOCAL_CFLAGS += \
+    -std=c++11 \
     -Wall \
     -Werror \
     -Wextra \

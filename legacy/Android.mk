@@ -58,6 +58,7 @@ LOCAL_STATIC_LIBRARIES := \
 # the timeval and timespec structures
 LOCAL_CFLAGS += \
     -D_POSIX_C_SOURCE=200809 \
+    -std=c++11 \
     -Wall \
     -Werror \
     -Wextra \
