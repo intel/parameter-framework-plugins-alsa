@@ -48,11 +48,10 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
 LOCAL_SHARED_LIBRARIES := \
     libparameter \
     libasound \
+    libxmlserializer \
 
 LOCAL_STATIC_LIBRARIES := \
     libalsabase-subsystem \
-    libparameter_includes \
-    libxmlserializer_includes \
 
 # -D_POSIX_C_SOURCE=200809 is needed because alsa-lib is redefining
 # the timeval and timespec structures
