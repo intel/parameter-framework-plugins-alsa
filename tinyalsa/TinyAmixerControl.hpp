@@ -85,7 +85,7 @@ protected:
      * @return true if no error
      */
     virtual bool readControl(struct mixer_ctl *mixerControl,
-                             uint32_t elementCount,
+                             size_t elementCount,
                              std::string &error) = 0;
 
     /**
@@ -98,6 +98,6 @@ protected:
      * @return true if no error
      */
     virtual bool writeControl(struct mixer_ctl *mixerControl,
-                              uint32_t elementCount,
+                              size_t elementCount,
                               std::string &error) = 0;
 };

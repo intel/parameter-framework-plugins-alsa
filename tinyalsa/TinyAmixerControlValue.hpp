@@ -51,10 +51,10 @@ public:
 
 protected:
     virtual bool readControl(struct mixer_ctl *mixerControl,
-                             uint32_t elementCount,
+                             size_t elementCount,
                              std::string &error);
 
     virtual bool writeControl(struct mixer_ctl *mixerControl,
-                              uint32_t elementCount,
+                              size_t elementCount,
                               std::string &error);
 };
