@@ -37,9 +37,9 @@ LOCAL_SRC_FILES := \
     AlsaCtlPortConfig.cpp \
     AmixerControl.cpp \
 
-LOCAL_STATIC_LIBRARIES := \
-    libparameter_includes \
-    libxmlserializer_includes \
+LOCAL_SHARED_LIBRARIES := \
+    libparameter \
+    libxmlserializer
 
 LOCAL_CFLAGS := \
     -Wall \

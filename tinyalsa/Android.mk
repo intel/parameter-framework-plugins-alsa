@@ -47,11 +47,10 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
 LOCAL_SHARED_LIBRARIES := \
     libparameter \
     libtinyalsa \
+    libxmlserializer \
 
 LOCAL_STATIC_LIBRARIES := \
     libalsabase-subsystem \
-    libparameter_includes \
-    libxmlserializer_includes \
 
 LOCAL_CFLAGS += \
     -Wall \
