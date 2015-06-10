@@ -45,7 +45,8 @@ public:
      */
     LegacyAmixerControl(const std::string &mappingValue,
                         CInstanceConfigurableElement *instanceConfigurableElement,
-                        const CMappingContext &context);
+                        const CMappingContext &context,
+                        core::log::ILogger& logger);
 
 protected:
     virtual bool accessHW(bool receive, std::string &error);

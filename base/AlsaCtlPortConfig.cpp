@@ -43,10 +43,12 @@ using std::string;
 AlsaCtlPortConfig::AlsaCtlPortConfig(const string &mappingValue,
                                      CInstanceConfigurableElement *instanceConfigurableElement,
                                      const CMappingContext &context,
+                                     core::log::ILogger& logger,
                                      const PortConfig &defaultPortConfig)
     : base(mappingValue,
            instanceConfigurableElement,
-           context),
+           context,
+           logger),
       _device(context.getItemAsInteger(AlsaCtlDevice)),
       _portConfig(defaultPortConfig)
 {

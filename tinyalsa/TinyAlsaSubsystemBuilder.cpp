@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "SubsystemLibrary.h"
-#include "NamedElementBuilderTemplate.h"
+#include "LoggingElementBuilderTemplate.h"
 #include "TinyAlsaSubsystem.hpp"
 
 extern "C"
@@ -43,7 +43,7 @@ extern "C"
 void getTINYALSASubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
 {
     subsystemLibrary->addElementBuilder(
-        "ALSA", new TNamedElementBuilderTemplate<TinyAlsaSubsystem>
+        "ALSA", new TLoggingElementBuilderTemplate<TinyAlsaSubsystem>(subsystemLibrary->getLogger())
         );
 }
 }

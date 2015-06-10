@@ -43,8 +43,9 @@
 TinyAmixerControlArray::TinyAmixerControlArray(
     const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context)
-    : base(mappingValue, instanceConfigurableElement, context, _byteScalarSize)
+    const CMappingContext &context,
+    core::log::ILogger& logger)
+    : base(mappingValue, instanceConfigurableElement, context, logger,  _byteScalarSize)
 {
 }
 
@@ -117,7 +118,7 @@ bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl,
 
 void TinyAmixerControlArray::displayAndCleanString(std::stringstream &stringValue) const
 {
-    log_info("%s", stringValue.str().c_str());
+    _Logger.info(stringValue.str());
     stringValue.str(std::string());
 }
 

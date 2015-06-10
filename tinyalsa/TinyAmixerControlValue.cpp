@@ -35,14 +35,16 @@
 #include <ctype.h>
 #include <errno.h>
 #include <string>
+#include <sstream>
 
 #define base TinyAmixerControl
 
 TinyAmixerControlValue::TinyAmixerControlValue(
     const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context)
-    : base(mappingValue, instanceConfigurableElement, context)
+    const CMappingContext &context,
+    core::log::ILogger& logger)
+    : base(mappingValue, instanceConfigurableElement, context, logger)
 {
 }
 
@@ -65,8 +67,10 @@ bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl,
 
         if (isDebugEnabled()) {
 
-            log_info("Reading alsa element %s, index %u with value %u",
-                     getControlName().c_str(), elementNumber, value);
+            std::ostringstream log;
+            log << "Reading alsa element " << getControlName() << ", index " << elementNumber
+                << " with value " << value;
+            _Logger.info(log.str());
         }
 
         toBlackboard(value);
@@ -91,8 +95,10 @@ bool TinyAmixerControlValue::writeControl(struct mixer_ctl *mixerControl,
 
         if (isDebugEnabled()) {
 
-            log_info("Writing alsa element %s, index %u with value %u",
-                     getControlName().c_str(), elementNumber, value);
+            std::ostringstream log;
+            log << "Writing alsa element " << getControlName() << ", index " << elementNumber
+                << " with value " << value;
+            _Logger.info(log.str());
         }
 
         // Write element

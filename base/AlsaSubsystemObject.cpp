@@ -45,8 +45,9 @@ const char AlsaSubsystemObject::_soundCardPath[] = "/proc/asound/";
 
 AlsaSubsystemObject::AlsaSubsystemObject(const string &mappingValue,
                                          CInstanceConfigurableElement *instanceConfigurableElement,
-                                         const CMappingContext &context)
-    : base(instanceConfigurableElement, mappingValue),
+                                         const CMappingContext &context,
+                                         core::log::ILogger& logger)
+    : base(instanceConfigurableElement, logger, mappingValue),
       _cardName(context.getItem(AlsaCard)),
       _cardIndex(getCardNumberByName(context.getItem(AlsaCard)))
 {
@@ -55,10 +56,11 @@ AlsaSubsystemObject::AlsaSubsystemObject(const string &mappingValue,
 
 AlsaSubsystemObject::AlsaSubsystemObject(const string &mappingValue,
                                          CInstanceConfigurableElement *instanceConfigurableElement,
+                                         core::log::ILogger& logger,
                                          uint32_t firstAmendKey,
                                          uint32_t nbAmendKeys,
                                          const CMappingContext &context)
-    : base(instanceConfigurableElement, mappingValue, firstAmendKey, nbAmendKeys, context),
+    : base(instanceConfigurableElement, logger, mappingValue, firstAmendKey, nbAmendKeys, context),
       _cardName(context.getItem(AlsaCard)),
       _cardIndex(getCardNumberByName(context.getItem(AlsaCard)))
 {

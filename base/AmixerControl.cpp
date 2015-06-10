@@ -35,7 +35,6 @@
 #include "ParameterBlockType.h"
 #include "MappingContext.h"
 #include "AlsaMappingKeys.hpp"
-#include "AutoLog.h"
 #include <string.h>
 #include <string>
 #include <ctype.h>
@@ -45,8 +44,9 @@
 
 AmixerControl::AmixerControl(const std::string &mappingValue,
                              CInstanceConfigurableElement *instanceConfigurableElement,
-                             const CMappingContext &context)
-    : base(mappingValue, instanceConfigurableElement,
+                             const CMappingContext &context,
+                             core::log::ILogger& logger)
+    : base(mappingValue, instanceConfigurableElement, logger,
            AlsaAmend1,
            gNbAlsaAmends,
            context),
@@ -98,8 +98,10 @@ AmixerControl::AmixerControl(const std::string &mappingValue,
 
 AmixerControl::AmixerControl(const std::string &mappingValue,
                              CInstanceConfigurableElement *instanceConfigurableElement,
-                             const CMappingContext &context, uint32_t scalarSize)
-    : base(mappingValue, instanceConfigurableElement,
+                             const CMappingContext &context,
+                             core::log::ILogger& logger,
+                             uint32_t scalarSize)
+    : base(mappingValue, instanceConfigurableElement, logger,
            AlsaAmend1,
            gNbAlsaAmends,
            context),
@@ -114,9 +116,9 @@ void AmixerControl::logControlInfo(bool receive) const
     if (_isDebugEnabled) {
 
         std::string controlName = getFormattedMappingValue();
-        log_info("%s ALSA Element Instance: %s\t\t(Control Element: %s)",
-                 receive ? "Reading" : "Writing",
-                 getConfigurableElement()->getPath().c_str(), controlName.c_str());
+        std::string way = (receive ? "Reading" : "Writing");
+        _Logger.info( way + " ALSA Element Instance: " + getConfigurableElement()->getPath() +
+                     "\t\t(Control Element: " + controlName + ")");
     }
 }
 

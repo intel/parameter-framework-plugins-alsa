@@ -52,5 +52,6 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libalsabase-subsystem
 LOCAL_MODULE_OWNER := intel
 
-include external/stlport/libstlport.mk
+LOCAL_CLANG := true
+include external/libcxx/libcxx.mk
 include $(BUILD_STATIC_LIBRARY)
