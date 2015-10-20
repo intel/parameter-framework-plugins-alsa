@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2014, Intel Corporation
+# Copyright (c) 2011-2015, Intel Corporation
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification,
@@ -40,6 +40,6 @@ include_directories(
 target_link_libraries(alsa-subsystem
     alsabase-subsystem
     ${ALSA_LIBRARIES}
-    ${PFW_LIBRARIES})
+    ${PFW_CORE_LIBRARY})
 
 install(TARGETS alsa-subsystem LIBRARY DESTINATION lib)
