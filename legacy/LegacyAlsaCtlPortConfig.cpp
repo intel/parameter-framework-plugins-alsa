@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014, Intel Corporation
+ * Copyright (c) 2011-2015, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -49,8 +49,9 @@ const uint32_t LegacyAlsaCtlPortConfig::_latencyMicroSeconds = 500000;
 LegacyAlsaCtlPortConfig::LegacyAlsaCtlPortConfig(
     const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context)
-    :  base(mappingValue, instanceConfigurableElement, context, _defaultPortConfig)
+    const CMappingContext &context,
+    core::log::Logger& logger)
+    :  base(mappingValue, instanceConfigurableElement, context, logger, _defaultPortConfig)
 {
     // Init stream handle array
     _streamHandle[Playback] = NULL;

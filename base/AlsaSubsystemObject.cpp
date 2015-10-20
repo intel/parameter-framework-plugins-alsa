@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014, Intel Corporation
+ * Copyright (c) 2011-2015, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -30,6 +30,7 @@
 #include "AlsaSubsystemObject.hpp"
 #include "MappingContext.h"
 #include "AlsaMappingKeys.hpp"
+#include <convert.hpp>
 
 #include <limits.h>
 #include <unistd.h>
@@ -45,8 +46,9 @@ const char AlsaSubsystemObject::_soundCardPath[] = "/proc/asound/";
 
 AlsaSubsystemObject::AlsaSubsystemObject(const string &mappingValue,
                                          CInstanceConfigurableElement *instanceConfigurableElement,
-                                         const CMappingContext &context)
-    : base(instanceConfigurableElement, mappingValue),
+                                         const CMappingContext &context,
+                                         core::log::Logger& logger)
+    : base(instanceConfigurableElement, logger, mappingValue),
       _cardName(context.getItem(AlsaCard)),
       _cardIndex(getCardNumberByName(context.getItem(AlsaCard)))
 {
@@ -55,10 +57,11 @@ AlsaSubsystemObject::AlsaSubsystemObject(const string &mappingValue,
 
 AlsaSubsystemObject::AlsaSubsystemObject(const string &mappingValue,
                                          CInstanceConfigurableElement *instanceConfigurableElement,
+                                         core::log::Logger& logger,
                                          uint32_t firstAmendKey,
                                          uint32_t nbAmendKeys,
                                          const CMappingContext &context)
-    : base(instanceConfigurableElement, mappingValue, firstAmendKey, nbAmendKeys, context),
+    : base(instanceConfigurableElement, logger, mappingValue, firstAmendKey, nbAmendKeys, context),
       _cardName(context.getItem(AlsaCard)),
       _cardIndex(getCardNumberByName(context.getItem(AlsaCard)))
 {
@@ -89,6 +92,10 @@ int32_t AlsaSubsystemObject::getCardNumberByName(const string &cardName)
     }
 
     // Extract card number from link (Example: 5 from card5)
-    return asInteger(numberFilepath + strlen("card"));
+    int32_t cardNumber = 0;
+    if (convertTo(numberFilepath + strlen("card"), cardNumber)) {
+        return cardNumber;
+    }
 
+    return -1; // A negative value indicates a failure
 }

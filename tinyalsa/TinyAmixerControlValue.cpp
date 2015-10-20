@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014, Intel Corporation
+ * Copyright (c) 2011-2015, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -35,14 +35,16 @@
 #include <ctype.h>
 #include <errno.h>
 #include <string>
+#include <sstream>
 
 #define base TinyAmixerControl
 
 TinyAmixerControlValue::TinyAmixerControlValue(
     const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context)
-    : base(mappingValue, instanceConfigurableElement, context)
+    const CMappingContext &context,
+    core::log::Logger& logger)
+    : base(mappingValue, instanceConfigurableElement, context, logger)
 {
 }
 
@@ -65,8 +67,8 @@ bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl,
 
         if (isDebugEnabled()) {
 
-            log_info("Reading alsa element %s, index %u with value %u",
-                     getControlName().c_str(), elementNumber, value);
+            info() << "Reading alsa element " << getControlName()
+                   << ", index " << elementNumber << " with value " << value;
         }
 
         toBlackboard(value);
@@ -91,8 +93,8 @@ bool TinyAmixerControlValue::writeControl(struct mixer_ctl *mixerControl,
 
         if (isDebugEnabled()) {
 
-            log_info("Writing alsa element %s, index %u with value %u",
-                     getControlName().c_str(), elementNumber, value);
+            info() << "Writing alsa element " << getControlName()
+                   << ", index " << elementNumber << " with value " << value;
         }
 
         // Write element
