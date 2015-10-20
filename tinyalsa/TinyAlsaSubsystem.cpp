@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014, Intel Corporation
+ * Copyright (c) 2011-2015, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -37,7 +37,8 @@
 #include "AmixerMutableVolume.hpp"
 #include <string>
 
-TinyAlsaSubsystem::TinyAlsaSubsystem(const std::string &name) : AlsaSubsystem(name), mMixers()
+TinyAlsaSubsystem::TinyAlsaSubsystem(const std::string &name, core::log::Logger& logger) :
+    AlsaSubsystem(name, logger), mMixers()
 {
     // Provide creators to upper layer
     addSubsystemObjectFactory(

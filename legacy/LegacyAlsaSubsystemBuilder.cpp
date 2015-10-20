@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014, Intel Corporation
+ * Copyright (c) 2011-2015, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,10 +27,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "SubsystemLibrary.h"
-#include "NamedElementBuilderTemplate.h"
+#include <Plugin.h>
+#include <LoggingElementBuilderTemplate.h>
 #include "LegacyAlsaSubsystem.hpp"
-#include "LegacyAmixerControl.hpp"
 
 extern "C"
 {
@@ -38,13 +37,11 @@ extern "C"
  * Alsa subsystem builder
  * This function is called when the PFW parses a subsystem structure XML of type "ALSA".
  * It will then create an Amixer Subsystem
- *
- * @param[in] subsystemLibrary the pointer on the subsystem library
  */
-void getALSASubsystemBuilder(CSubsystemLibrary *subsystemLibrary)
+void PARAMETER_FRAMEWORK_PLUGIN_ENTRYPOINT_V1(CSubsystemLibrary *subsystemLibrary,
+                                              core::log::Logger &logger)
 {
     subsystemLibrary->addElementBuilder(
-        "ALSA", new TNamedElementBuilderTemplate<LegacyAlsaSubsystem>
-        );
+        "ALSA", new TLoggingElementBuilderTemplate<LegacyAlsaSubsystem>(logger));
 }
 }

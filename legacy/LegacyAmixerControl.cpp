@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014, Intel Corporation
+ * Copyright (c) 2011-2015, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -33,7 +33,7 @@
 #include "BitParameterBlockType.h"
 #include "MappingContext.h"
 #include "AlsaMappingKeys.hpp"
-#include "AutoLog.h"
+#include <convert.hpp>
 #include <assert.h>
 #include <string.h>
 #include <string>
@@ -55,25 +55,21 @@ int snd_ctl_hw_open(snd_ctl_t **handle, const char *name, int card, int mode);
 LegacyAmixerControl::LegacyAmixerControl(
     const std::string &mappingValue,
     CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context)
-    : base(mappingValue, instanceConfigurableElement, context)
+    const CMappingContext &context,
+    core::log::Logger& logger)
+    : base(mappingValue, instanceConfigurableElement, context, logger)
 {
 
 }
 
 bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 {
-    CAutoLog autoLog(getConfigurableElement(), "ALSA", isDebugEnabled());
-
 #ifdef SIMULATION
     if (receive) {
 
         memset(getBlackboardLocation(), 0, getSize());
     }
-    log_info("%s ALSA Element Instance: %s\t\t(Control Element: %s)",
-             receive ? "Reading" : "Writing",
-             getConfigurableElement()->getPath().c_str(),
-             getControlName().c_str());
+    logControlInfo(receive);
 
     return true;
 #endif
@@ -141,7 +137,10 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
     // Set name or id
     if (isdigit(controlName[0])) {
 
-        snd_ctl_elem_id_set_numid(id, asInteger(controlName));
+        unsigned int controlId = 0;
+        // TODO: error checking
+        convertTo(controlName, controlId);
+        snd_ctl_elem_id_set_numid(id, controlId);
     } else {
 
         snd_ctl_elem_id_set_name(id, controlName.c_str());
@@ -171,9 +170,9 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
     // If size defined in the PFW different from alsa mixer control size, return an error
     if (elementCount * scalarSize != getSize()) {
 
-        error = "ALSA: Control element count (" + asString(elementCount) +
+        error = "ALSA: Control element count (" + std::to_string(elementCount) +
                 ") and configurable scalar element count (" +
-                asString(getSize() / scalarSize) + ") mismatch";
+                std::to_string(getSize() / scalarSize) + ") mismatch";
 
         // Close sound control
         snd_ctl_close(sndCtrl);
@@ -223,8 +222,9 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 
             if (isDebugEnabled()) {
 
-                log_info("Reading alsa element %s, index %u with value %u",
-                         controlName.c_str(), index, value);
+                // The "info" method has been shadowed by a local variable
+                this->info() << "Reading alsa element " << controlName
+                             << ", index " << index << " with value " << value;
             }
 
             // Write data to blackboard (beware this code is OK on Little Endian machines only)
@@ -241,8 +241,9 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 
             if (isDebugEnabled()) {
 
-                log_info("Writing alsa element %s, index %u with value %u",
-                         controlName.c_str(), index, value);
+                // The "info" method has been shadowed by a local variable
+                this->info() << "Writing alsa element " << controlName
+                             << ", index " << index << " with value " << value;
             }
 
             switch (eType) {

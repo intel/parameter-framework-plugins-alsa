@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014, Intel Corporation
+ * Copyright (c) 2011-2015, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -43,10 +43,12 @@ using std::string;
 AlsaCtlPortConfig::AlsaCtlPortConfig(const string &mappingValue,
                                      CInstanceConfigurableElement *instanceConfigurableElement,
                                      const CMappingContext &context,
+                                     core::log::Logger& logger,
                                      const PortConfig &defaultPortConfig)
     : base(mappingValue,
            instanceConfigurableElement,
-           context),
+           context,
+           logger),
       _device(context.getItemAsInteger(AlsaCtlDevice)),
       _portConfig(defaultPortConfig)
 {
