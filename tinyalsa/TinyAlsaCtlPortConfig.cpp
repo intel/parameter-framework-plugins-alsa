@@ -114,6 +114,7 @@ bool TinyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, std::s
     pcmConfig.start_threshold   = 0;
     pcmConfig.stop_threshold    = 0;
     pcmConfig.silence_threshold = 0;
+    pcmConfig.silence_size      = 0;
     pcmConfig.avail_min         = 0;
 
     // Open and configure
