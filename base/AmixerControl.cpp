@@ -56,38 +56,18 @@ AmixerControl::AmixerControl(const std::string &mappingValue,
 {
     // Check we are able to handle elements (no exception support, defer the error)
     switch (instanceConfigurableElement->getType()) {
-    case CInstanceConfigurableElement::EParameter: {
 
-        // Get actual element type
-        const CParameterType *parameterType = static_cast<const CParameterType *>(
-            instanceConfigurableElement->getTypeElement());
-
-        // Get scalar parameter size
-        // this size indicates elementary size, regardless of ArrayLength
-        _scalarSize = parameterType->getSize();
-        break;
-    }
-    case CInstanceConfigurableElement::EBitParameterBlock: {
-
-        // Get actual element type
-        const CBitParameterBlockType *bitParameterBlockType =
-            static_cast<const CBitParameterBlockType *>(
-                instanceConfigurableElement->getTypeElement());
-
-        // Get scalar parameter size
-        // this size indicates elementary size, regardless of ArrayLength
-        _scalarSize = bitParameterBlockType->getSize();
-        break;
-    }
+    case CInstanceConfigurableElement::EParameter:
+    case CInstanceConfigurableElement::EBitParameterBlock:
+    case CInstanceConfigurableElement::EComponent:
     case CInstanceConfigurableElement::EParameterBlock: {
 
         // Get actual element type
-        const CParameterBlockType *parameterType = static_cast<const CParameterBlockType *>(
-            instanceConfigurableElement->getTypeElement());
+        const CTypeElement *element = instanceConfigurableElement->getTypeElement();
 
         // If the parameter is a scalar its array size is 0, not 1.
         _scalarSize = instanceConfigurableElement->getFootPrint() /
-                      std::max(parameterType->getArrayLength(), size_t{1});
+                      std::max(element->getArrayLength(), size_t{1});
         break;
     }
     default: {
