@@ -41,6 +41,15 @@
 #include <ctype.h>
 #include <alsa/asoundlib.h>
 #include <sstream>
+#include <algorithm>
+
+/* Copy from sound/asound.h
+ */
+struct snd_ctl_tlv {
+	unsigned int numid;	/* control element numeric identification */
+	unsigned int length;	/* in bytes aligned to 4 */
+	unsigned int tlv[0];	/* first TLV */
+};
 
 #ifdef ANDROID
 extern "C"
@@ -184,6 +193,32 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 
     if (receive) {
 
+        if ((eType == SND_CTL_ELEM_TYPE_BYTES) &&
+          snd_ctl_elem_info_is_tlv_readable(info)) {
+
+            size_t tlvSize = sizeof(struct snd_ctl_tlv) + elementCount;
+
+            struct snd_ctl_tlv *tlv = reinterpret_cast<struct snd_ctl_tlv *>(new unsigned char[tlvSize]);
+
+            ret = snd_ctl_elem_tlv_read(sndCtrl, id, reinterpret_cast<unsigned int *>(tlv), tlvSize);
+            if (ret) {
+
+                error = "ALSA: Unable to read element " + controlName +
+                        ": " + snd_strerror(ret);
+
+            } else {
+                std::copy_n(reinterpret_cast<unsigned char *>(tlv->tlv), elementCount,
+                            getBlackboardLocation());
+            }
+
+            delete[] tlv;
+
+            // Close sound control
+            snd_ctl_close(sndCtrl);
+
+            return ret >= 0;
+        }
+
         // Read element
         if ((ret = snd_ctl_elem_read(sndCtrl, control)) < 0) {
 
@@ -232,6 +267,39 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
         }
 
     } else {
+
+        if ((eType == SND_CTL_ELEM_TYPE_BYTES) &&
+          snd_ctl_elem_info_is_tlv_writable(info)) {
+            /* tlv is structured as an array of unsigned int
+             * tlv[0] is control element ID. (unused)
+             * tlv[1] is array length
+             */
+
+            size_t tlvSize = sizeof(struct snd_ctl_tlv) + elementCount;
+
+            struct snd_ctl_tlv *tlv = reinterpret_cast<struct snd_ctl_tlv *>(new unsigned char[tlvSize]);
+
+            tlv->numid = 0;
+            tlv->length = elementCount;
+
+            std::copy_n(getBlackboardLocation(), elementCount,
+                        reinterpret_cast<unsigned char *>(tlv->tlv));
+
+            ret = snd_ctl_elem_tlv_write(sndCtrl, id, reinterpret_cast<unsigned int *>(tlv));
+            if (ret) {
+
+                error = "ALSA: Unable to write element " + controlName +
+                        ": " + snd_strerror(ret);
+            }
+
+            delete[] tlv;
+
+            // Close sound control
+            snd_ctl_close(sndCtrl);
+
+            return ret >= 0;
+        }
+
 
         // Go through all indexes
         for (index = 0; index < elementCount; index++) {

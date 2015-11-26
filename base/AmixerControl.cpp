@@ -79,6 +79,12 @@ AmixerControl::AmixerControl(const std::string &mappingValue,
         _scalarSize = bitParameterBlockType->getSize();
         break;
     }
+    case CInstanceConfigurableElement::EComponent: {
+
+        // Assume Component is always mapped to bytes control
+        _scalarSize = size_t{1};
+        break;
+    }
     case CInstanceConfigurableElement::EParameterBlock: {
 
         // Get actual element type
