@@ -42,13 +42,6 @@
 #include <alsa/asoundlib.h>
 #include <sstream>
 
-#ifdef ANDROID
-extern "C"
-{
-int snd_ctl_hw_open(snd_ctl_t **handle, const char *name, int card, int mode);
-}
-#endif
-
 
 #define base AmixerControl
 
@@ -102,14 +95,6 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 
         return false;
     }
-#ifdef ANDROID
-    if ((ret = snd_ctl_hw_open(&sndCtrl, NULL, cardNumber, 0)) < 0) {
-
-        error = snd_strerror(ret);
-
-        return false;
-    }
-#else
     // Create device name
     std::ostringstream deviceName;
 
@@ -122,7 +107,6 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 
         return false;
     }
-#endif
 
     // Allocate in stack
     snd_ctl_elem_id_alloca(&id);
