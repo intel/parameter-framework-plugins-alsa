@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2016, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -92,7 +92,7 @@ bool TinyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, std::s
     // Check Format is supported by the plugin
     if (portConfig.format >= pcmFormatTranslationTableSize) {
 
-        error = "The format n°" + asString(portConfig.format) +
+        error = "The format n°" + std::to_string(int{portConfig.format}) +
                 " is not supported by the TinyAlsa plugin";
         return false;
     }
