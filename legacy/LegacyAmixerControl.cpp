@@ -150,6 +150,10 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
     elementCount = snd_ctl_elem_info_get_count(info);
 
     uint32_t scalarSize = getScalarSize();
+    // For Bytes control force scalar size to 1 byte
+    if (eType == SND_CTL_ELEM_TYPE_BYTES) {
+        scalarSize = 1;
+    }
 
     // If size defined in the PFW different from alsa mixer control size, return an error
     if (elementCount * scalarSize != getSize()) {
