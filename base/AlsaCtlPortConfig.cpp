@@ -55,7 +55,7 @@ AlsaCtlPortConfig::AlsaCtlPortConfig(const string &mappingValue,
 
 }
 
-bool AlsaCtlPortConfig::receiveFromHW(string &error)
+bool AlsaCtlPortConfig::receiveFromHW(string &/*error*/)
 {
     blackboardWrite(&_portConfig, sizeof(_portConfig));
 
