@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2014, Intel Corporation
+# Copyright (c) 2011-2016, Intel Corporation
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification,
@@ -31,7 +31,7 @@ add_library(alsabase-subsystem STATIC
     AlsaCtlPortConfig.cpp
     AmixerControl.cpp)
 
-include_directories(${PFW_INCLUDE_DIRS})
+target_link_libraries(alsabase-subsystem ParameterFramework::plugin)
 
 # FIXME: suppress the need for -Wno-unused-parameter
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -fPIC")

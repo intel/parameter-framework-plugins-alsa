@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2015, Intel Corporation
+# Copyright (c) 2011-2016, Intel Corporation
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification,
@@ -33,13 +33,11 @@ add_library(alsa-subsystem SHARED
     LegacyAlsaCtlPortConfig.cpp)
 
 include_directories(
-    ${PFW_INCLUDE_DIRS}
     ${PROJECT_SOURCE_DIR}/base
     ${PROJECT_SOURCE_DIR}/legacy)
 
 target_link_libraries(alsa-subsystem
     alsabase-subsystem
-    ${ALSA_LIBRARIES}
-    ${PFW_CORE_LIBRARY})
+    ${ALSA_LIBRARIES})
 
 install(TARGETS alsa-subsystem LIBRARY DESTINATION lib)

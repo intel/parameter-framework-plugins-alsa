@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2015, Intel Corporation
+# Copyright (c) 2011-2016, Intel Corporation
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification,
@@ -34,16 +34,9 @@ project(parameter-framework-plugins-alsa)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Werror -Wall -Wextra")
 
 #
-# Find PFW libraries and include directories
+# Find the Parameter Framework core
 #
-find_path(PFW_INCLUDE_ROOT NAMES parameter/plugin/Plugin.h)
-
-find_library(PFW_CORE_LIBRARY NAMES parameter)
-
-set(PFW_INCLUDE_DIRS
-    ${PFW_INCLUDE_ROOT}/parameter/plugin
-    ${PFW_INCLUDE_ROOT}/xmlserializer
-    ${PFW_INCLUDE_ROOT}/utility)
+find_package(ParameterFramework 3 REQUIRED)
 
 #
 # Find (regular) alsa-lib
