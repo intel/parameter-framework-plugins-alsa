@@ -42,6 +42,7 @@
 #include <ctype.h>
 #include <alsa/asoundlib.h>
 #include <sstream>
+#include <numeric>
 
 /* from sound/asound.h, header is not compatible with alsa/asoundlib.h
  */
@@ -217,40 +218,58 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
 
             return false;
         }
-        // Go through all indexes
-        for (index = 0; index < elementCount; index++) {
 
-            switch (eType) {
-            case SND_CTL_ELEM_TYPE_BOOLEAN:
-                value = snd_ctl_elem_value_get_boolean(control, index);
-                break;
-            case SND_CTL_ELEM_TYPE_INTEGER:
-                value = snd_ctl_elem_value_get_integer(control, index);
-                break;
-            case SND_CTL_ELEM_TYPE_INTEGER64:
-                value = snd_ctl_elem_value_get_integer64(control, index);
-                break;
-            case SND_CTL_ELEM_TYPE_ENUMERATED:
-                value = snd_ctl_elem_value_get_enumerated(control, index);
-                break;
-            case SND_CTL_ELEM_TYPE_BYTES:
-                value = snd_ctl_elem_value_get_byte(control, index);
-                break;
-            default:
-                error = "ALSA: Unknown control element type while reading alsa element " +
-                        controlName;
-                return false;
-            }
+        if (eType == SND_CTL_ELEM_TYPE_BYTES) {
+            const void *data = snd_ctl_elem_value_get_bytes(control);
 
             if (isDebugEnabled()) {
+                const unsigned char *first = reinterpret_cast<const unsigned char *>(data);
+                const unsigned char *last = first + elementCount;
 
                 // The "info" method has been shadowed by a local variable
-                this->info() << "Reading alsa element " << controlName
-                             << ", index " << index << " with value " << value;
+                this->info() << "Reading alsa element " << controlName << ": "
+                             << std::accumulate(first, last, std::string{},
+                    [](const std::string& a, std::vector<unsigned char>::value_type b) {
+                        return a.empty() ? std::to_string(b) : a + ',' + std::to_string(b);
+                    });
             }
 
-            // Write data to blackboard (beware this code is OK on Little Endian machines only)
-            toBlackboard(value);
+            blackboardWrite(data, elementCount);
+
+        } else {
+
+            // Go through all indexes
+            for (index = 0; index < elementCount; index++) {
+
+                switch (eType) {
+                case SND_CTL_ELEM_TYPE_BOOLEAN:
+                    value = snd_ctl_elem_value_get_boolean(control, index);
+                    break;
+                case SND_CTL_ELEM_TYPE_INTEGER:
+                    value = snd_ctl_elem_value_get_integer(control, index);
+                    break;
+                case SND_CTL_ELEM_TYPE_INTEGER64:
+                    value = snd_ctl_elem_value_get_integer64(control, index);
+                    break;
+                case SND_CTL_ELEM_TYPE_ENUMERATED:
+                    value = snd_ctl_elem_value_get_enumerated(control, index);
+                    break;
+                default:
+                    error = "ALSA: Unknown control element type while reading alsa element " +
+                            controlName;
+                    return false;
+                }
+
+                if (isDebugEnabled()) {
+
+                    // The "info" method has been shadowed by a local variable
+                    this->info() << "Reading alsa element " << controlName
+                                 << ", index " << index << " with value " << value;
+                }
+
+                // Write data to blackboard (beware this code is OK on Little Endian machines only)
+                toBlackboard(value);
+            }
         }
 
     } else {
@@ -281,39 +300,56 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
             return ret == 0;
         }
 
-        // Go through all indexes
-        for (index = 0; index < elementCount; index++) {
+        if (eType == SND_CTL_ELEM_TYPE_BYTES) {
+            std::vector<unsigned char> rawData(elementCount);
 
-            // Read data from blackboard (beware this code is OK on Little Endian machines only)
-            value = fromBlackboard();
+            blackboardRead(rawData.data(), elementCount);
 
             if (isDebugEnabled()) {
 
                 // The "info" method has been shadowed by a local variable
-                this->info() << "Writing alsa element " << controlName
-                             << ", index " << index << " with value " << value;
+                this->info() << "Writing alsa element " << controlName << ": "
+                             << std::accumulate(begin(rawData), end(rawData), std::string{},
+                    [](const std::string& a, std::vector<unsigned char>::value_type b) {
+                        return a.empty() ? std::to_string(b) : a + ',' + std::to_string(b);
+                    });
+
             }
 
-            switch (eType) {
-            case SND_CTL_ELEM_TYPE_BOOLEAN:
-                snd_ctl_elem_value_set_boolean(control, index, value);
-                break;
-            case SND_CTL_ELEM_TYPE_INTEGER:
-                snd_ctl_elem_value_set_integer(control, index, value);
-                break;
-            case SND_CTL_ELEM_TYPE_INTEGER64:
-                snd_ctl_elem_value_set_integer64(control, index, value);
-                break;
-            case SND_CTL_ELEM_TYPE_ENUMERATED:
-                snd_ctl_elem_value_set_enumerated(control, index, value);
-                break;
-            case SND_CTL_ELEM_TYPE_BYTES:
-                snd_ctl_elem_value_set_byte(control, index, value);
-                break;
-            default:
-                error = "ALSA: Unknown control element type while writing alsa element " +
+            snd_ctl_elem_set_bytes(control, rawData.data(), elementCount);
+
+        } else {
+            // Go through all indexes
+            for (index = 0; index < elementCount; index++) {
+
+                // Read data from blackboard (beware this code is OK on Little Endian machines only)
+                value = fromBlackboard();
+
+                if (isDebugEnabled()) {
+
+                    // The "info" method has been shadowed by a local variable
+                    this->info() << "Writing alsa element " << controlName
+                                 << ", index " << index << " with value " << value;
+                }
+
+                switch (eType) {
+                case SND_CTL_ELEM_TYPE_BOOLEAN:
+                    snd_ctl_elem_value_set_boolean(control, index, value);
+                    break;
+                case SND_CTL_ELEM_TYPE_INTEGER:
+                    snd_ctl_elem_value_set_integer(control, index, value);
+                    break;
+                case SND_CTL_ELEM_TYPE_INTEGER64:
+                    snd_ctl_elem_value_set_integer64(control, index, value);
+                    break;
+                case SND_CTL_ELEM_TYPE_ENUMERATED:
+                    snd_ctl_elem_value_set_enumerated(control, index, value);
+                    break;
+                default:
+                    error = "ALSA: Unknown control element type while writing alsa element " +
                         controlName;
-                return false;
+                    return false;
+                }
             }
         }
 
