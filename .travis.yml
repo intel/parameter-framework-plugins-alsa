@@ -22,10 +22,12 @@ addons:
 
 before_install:
     - mkdir $CMAKE_PREFIX_PATH
+    - ( cd $HOME; git clone https://github.com/tinyalsa/tinyalsa )
 
 install:
     - wget 'https://github.com/01org/parameter-framework/releases/download/v3.2.6/parameter-framework-3.2.6.0-Linux.tar.gz'
     - tar xf parameter-framework-3.2.6.0-Linux.tar.gz --strip-components=1 -C $CMAKE_PREFIX_PATH
+    - ( cd $HOME/tinyalsa; make -j$(nproc) DOXYGEN= && make PREFIX=$CMAKE_PREFIX_PATH install )
 
 before_script:
     - export CC=gcc-4.8 CXX=g++-4.8

@@ -26,31 +26,24 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# has been tested on 3.2 only - might work on older versions
-cmake_minimum_required(VERSION 3.2)
+find_library(tinyalsa_lib tinyalsa)
+find_path(tinyalsa_includes tinyalsa/asoundlib.h)
 
-project(parameter-framework-plugins-alsa)
+# TODO: when not found
 
-option(ALSALIB "Build the alsa-lib plugin" ON)
-# OFF by default in order to keep the same default behaviour as before
-option(TINYALSA "Build the tinyalsa plugin" OFF)
+add_library(tinyalsa-subsystem SHARED
+    TinyAlsaCtlPortConfig.cpp
+    TinyAlsaSubsystemBuilder.cpp
+    TinyAlsaSubsystem.cpp
+    TinyAmixerControlArray.cpp
+    TinyAmixerControl.cpp
+    TinyAmixerControlValue.cpp)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Werror -Wall -Wextra")
+target_include_directories(tinyalsa-subsystem
+    PUBLIC ${PROJECT_SOURCE_DIR}/base ${PROJECT_SOURCE_DIR}/legacy ${tinyalsa_includes})
 
-#
-# Find the Parameter Framework core
-#
-find_package(ParameterFramework 3 REQUIRED)
+target_link_libraries(tinyalsa-subsystem
+    alsabase-subsystem
+    ${tinyalsa_lib})
 
-#
-# Find (regular) alsa-lib
-#
-include(FindALSA)
-
-add_subdirectory(base)
-if(ALSALIB)
-    add_subdirectory(legacy)
-endif()
-if(TINYALSA)
-    add_subdirectory(tinyalsa)
-endif()
+install(TARGETS tinyalsa-subsystem LIBRARY DESTINATION lib)
