@@ -34,6 +34,7 @@
 #include <tinyalsa/asoundlib.h>
 #include <string>
 #include <sstream>
+#include <limits>
 
 #define base AlsaCtlPortConfig
 
