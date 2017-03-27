@@ -39,7 +39,7 @@ extern "C"
  * It will then create an TinyAMixer Subsystem
  */
 void PARAMETER_FRAMEWORK_PLUGIN_ENTRYPOINT_V1(CSubsystemLibrary *subsystemLibrary,
-                                              core::log::Logger&)
+                                              core::log::Logger& logger)
 {
     subsystemLibrary->addElementBuilder(
         "ALSA", new TLoggingElementBuilderTemplate<TinyAlsaSubsystem>(logger));
