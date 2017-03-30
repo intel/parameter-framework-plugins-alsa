@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -42,20 +42,14 @@ using std::string;
 
 AlsaCtlPortConfig::AlsaCtlPortConfig(const string &mappingValue,
                                      CInstanceConfigurableElement *instanceConfigurableElement,
-                                     const CMappingContext &context,
-                                     core::log::Logger& logger,
+                                     const CMappingContext &context, core::log::Logger &logger,
                                      const PortConfig &defaultPortConfig)
-    : base(mappingValue,
-           instanceConfigurableElement,
-           context,
-           logger),
-      _device(context.getItemAsInteger(AlsaCtlDevice)),
-      _portConfig(defaultPortConfig)
+    : base(mappingValue, instanceConfigurableElement, context, logger),
+      _device(context.getItemAsInteger(AlsaCtlDevice)), _portConfig(defaultPortConfig)
 {
-
 }
 
-bool AlsaCtlPortConfig::receiveFromHW(string &/*error*/)
+bool AlsaCtlPortConfig::receiveFromHW(string & /*error*/)
 {
     blackboardWrite(&_portConfig, sizeof(_portConfig));
 
@@ -144,13 +138,12 @@ void AlsaCtlPortConfig::closeStream(StreamDirection streamDirection)
 }
 
 string AlsaCtlPortConfig::formatAlsaError(StreamDirection streamDirection,
-                                          const string &functionName,
-                                          const string &error)
+                                          const string &functionName, const string &error)
 {
     std::ostringstream stringStream;
 
-    stringStream << (streamDirection ? "Capture" : "Playback") << " " <<
-        functionName << " error: " << error;
+    stringStream << (streamDirection ? "Capture" : "Playback") << " " << functionName
+                 << " error: " << error;
 
     return stringStream.str();
 }
@@ -158,7 +151,6 @@ string AlsaCtlPortConfig::formatAlsaError(StreamDirection streamDirection,
 bool AlsaCtlPortConfig::isStreamEnabled(StreamDirection streamDirection) const
 {
     return _portConfig.isStreamEnabled[streamDirection] != 0;
-
 }
 
 bool AlsaCtlPortConfig::isDeviceUpdateNeeded(const PortConfig &portConfig) const

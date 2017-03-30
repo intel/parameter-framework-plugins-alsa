@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -45,23 +45,22 @@ protected:
     struct PortConfig
     {
         uint8_t isStreamEnabled[2]; /**< [1] == Capture stream, [0] == Playback stream */
-        uint8_t format;            /**< S16LE,... */
-        uint8_t channelNumber;     /**< 1 == Mono.. */
-        uint16_t sampleRate;       /**< 16000, 48000... */
+        uint8_t format;             /**< S16LE,... */
+        uint8_t channelNumber;      /**< 1 == Mono.. */
+        uint16_t sampleRate;        /**< 16000, 48000... */
     } __attribute__((packed));
 
 public:
     /** Structure to convert alsa formats in tinyalsa formats */
     struct FormatTranslation
     {
-        uint8_t formatAsNumerical; /**< Tiny alsa format value */
+        uint8_t formatAsNumerical;  /**< Tiny alsa format value */
         std::string formatAsString; /**< Litteral value */
     };
 
     AlsaCtlPortConfig(const std::string &mappingValue,
                       CInstanceConfigurableElement *instanceConfigurableElement,
-                      const CMappingContext &contVext,
-                      core::log::Logger& logger,
+                      const CMappingContext &contVext, core::log::Logger &logger,
                       const PortConfig &defaultPortConfig);
 
 protected:
@@ -120,9 +119,8 @@ protected:
      *
      * @return the string containing the error formatted
      */
-    std::string formatAlsaError(StreamDirection streamDirection,
-                           const std::string &functionName,
-                           const std::string &error);
+    std::string formatAlsaError(StreamDirection streamDirection, const std::string &functionName,
+                                const std::string &error);
 
 private:
     /**

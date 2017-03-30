@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -42,13 +42,10 @@ class AlsaSubsystemObject : public CFormattedSubsystemObject
 public:
     AlsaSubsystemObject(const std::string &mappingValue,
                         CInstanceConfigurableElement *instanceConfigurableElement,
-                        const CMappingContext &context,
-                        core::log::Logger& logger);
+                        const CMappingContext &context, core::log::Logger &logger);
     AlsaSubsystemObject(const std::string &strMappingValue,
                         CInstanceConfigurableElement *instanceConfigurableElement,
-                        core::log::Logger& logger,
-                        uint32_t firstAmendKey,
-                        uint32_t nbAmendKeys,
+                        core::log::Logger &logger, uint32_t firstAmendKey, uint32_t nbAmendKeys,
                         const CMappingContext &context);
 
 protected:

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -31,8 +31,7 @@
 #include <LoggingElementBuilderTemplate.h>
 #include "LegacyAlsaSubsystem.hpp"
 
-extern "C"
-{
+extern "C" {
 /**
  * Alsa subsystem builder
  * This function is called when the PFW parses a subsystem structure XML of type "ALSA".

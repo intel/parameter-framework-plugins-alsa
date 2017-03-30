@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -44,14 +44,9 @@
 
 AmixerControl::AmixerControl(const std::string &mappingValue,
                              CInstanceConfigurableElement *instanceConfigurableElement,
-                             const CMappingContext &context,
-                             core::log::Logger& logger)
-    : base(mappingValue, instanceConfigurableElement, logger,
-           AlsaAmend1,
-           gNbAlsaAmends,
-           context),
-      _scalarSize(0),
-      _hasWrongElementTypeError(false),
+                             const CMappingContext &context, core::log::Logger &logger)
+    : base(mappingValue, instanceConfigurableElement, logger, AlsaAmend1, gNbAlsaAmends, context),
+      _scalarSize(0), _hasWrongElementTypeError(false),
       _isDebugEnabled(context.iSet(AlsaDebugEnable))
 {
     // Check we are able to handle elements (no exception support, defer the error)
@@ -78,15 +73,10 @@ AmixerControl::AmixerControl(const std::string &mappingValue,
 
 AmixerControl::AmixerControl(const std::string &mappingValue,
                              CInstanceConfigurableElement *instanceConfigurableElement,
-                             const CMappingContext &context,
-                             core::log::Logger& logger,
+                             const CMappingContext &context, core::log::Logger &logger,
                              uint32_t scalarSize)
-    : base(mappingValue, instanceConfigurableElement, logger,
-           AlsaAmend1,
-           gNbAlsaAmends,
-           context),
-      _scalarSize(scalarSize),
-      _hasWrongElementTypeError(false),
+    : base(mappingValue, instanceConfigurableElement, logger, AlsaAmend1, gNbAlsaAmends, context),
+      _scalarSize(scalarSize), _hasWrongElementTypeError(false),
       _isDebugEnabled(context.iSet(AlsaDebugEnable))
 {
 }

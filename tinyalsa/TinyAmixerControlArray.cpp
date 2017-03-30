@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -41,16 +41,13 @@
 #define maxLogLine 64
 
 TinyAmixerControlArray::TinyAmixerControlArray(
-    const std::string &mappingValue,
-    CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context,
-    core::log::Logger& logger)
-    : base(mappingValue, instanceConfigurableElement, context, logger,  _byteScalarSize)
+    const std::string &mappingValue, CInstanceConfigurableElement *instanceConfigurableElement,
+    const CMappingContext &context, core::log::Logger &logger)
+    : base(mappingValue, instanceConfigurableElement, context, logger, _byteScalarSize)
 {
 }
 
-int TinyAmixerControlArray::doGetArrayMixer(struct mixer_ctl *mixerControl,
-                                            void *array,
+int TinyAmixerControlArray::doGetArrayMixer(struct mixer_ctl *mixerControl, void *array,
                                             size_t elementCount)
 {
     int ret = mixer_ctl_get_array(mixerControl, array, elementCount);
@@ -62,8 +59,7 @@ int TinyAmixerControlArray::doGetArrayMixer(struct mixer_ctl *mixerControl,
     return ret;
 }
 
-int TinyAmixerControlArray::doSetArrayMixer(struct mixer_ctl *mixerControl,
-                                            const void *array,
+int TinyAmixerControlArray::doSetArrayMixer(struct mixer_ctl *mixerControl, const void *array,
                                             size_t elementCount)
 {
     if (isDebugEnabled()) {
@@ -83,24 +79,22 @@ int TinyAmixerControlArray::setArrayMixer(struct mixer_ctl *mixerControl, size_t
     return doSetArrayMixer(mixerControl, getBlackboardLocation(), elementCount);
 }
 
-bool TinyAmixerControlArray::readControl(struct mixer_ctl *mixerControl,
-                                         size_t elementCount,
+bool TinyAmixerControlArray::readControl(struct mixer_ctl *mixerControl, size_t elementCount,
                                          std::string &error)
 {
     int err;
 
     if ((err = getArrayMixer(mixerControl, elementCount)) < 0) {
 
-        error = "Failed to read value in mixer control: " + getControlName() + ": " +
-                strerror(-err);
+        error =
+            "Failed to read value in mixer control: " + getControlName() + ": " + strerror(-err);
         return false;
     }
 
     return true;
 }
 
-bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl,
-                                          size_t elementCount,
+bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl, size_t elementCount,
                                           std::string &error)
 {
     int err;
@@ -108,8 +102,8 @@ bool TinyAmixerControlArray::writeControl(struct mixer_ctl *mixerControl,
     // Write element
     if ((err = setArrayMixer(mixerControl, elementCount)) < 0) {
 
-        error = "Failed to write value in mixer control: " + getControlName() + ": " +
-                strerror(-err);
+        error =
+            "Failed to write value in mixer control: " + getControlName() + ": " + strerror(-err);
         return false;
     }
 
@@ -122,8 +116,7 @@ void TinyAmixerControlArray::displayAndCleanString(std::stringstream &stringValu
     stringValue.str(std::string());
 }
 
-void TinyAmixerControlArray::logControlValues(bool receive,
-                                              const void *array,
+void TinyAmixerControlArray::logControlValues(bool receive, const void *array,
                                               size_t elementCount) const
 {
     const unsigned char *buffer = reinterpret_cast<const unsigned char *>(array);
