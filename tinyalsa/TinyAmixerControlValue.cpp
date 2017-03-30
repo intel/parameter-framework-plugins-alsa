@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -40,16 +40,13 @@
 #define base TinyAmixerControl
 
 TinyAmixerControlValue::TinyAmixerControlValue(
-    const std::string &mappingValue,
-    CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context,
-    core::log::Logger& logger)
+    const std::string &mappingValue, CInstanceConfigurableElement *instanceConfigurableElement,
+    const CMappingContext &context, core::log::Logger &logger)
     : base(mappingValue, instanceConfigurableElement, context, logger)
 {
 }
 
-bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl,
-                                         size_t elementCount,
+bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl, size_t elementCount,
                                          std::string &error)
 {
     uint32_t elementNumber;
@@ -67,8 +64,8 @@ bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl,
 
         if (isDebugEnabled()) {
 
-            info() << "Reading alsa element " << getControlName()
-                   << ", index " << elementNumber << " with value " << value;
+            info() << "Reading alsa element " << getControlName() << ", index " << elementNumber
+                   << " with value " << value;
         }
 
         toBlackboard(value);
@@ -76,8 +73,7 @@ bool TinyAmixerControlValue::readControl(struct mixer_ctl *mixerControl,
     return true;
 }
 
-bool TinyAmixerControlValue::writeControl(struct mixer_ctl *mixerControl,
-                                          size_t elementCount,
+bool TinyAmixerControlValue::writeControl(struct mixer_ctl *mixerControl, size_t elementCount,
                                           std::string &error)
 {
     uint32_t elementNumber;
@@ -93,8 +89,8 @@ bool TinyAmixerControlValue::writeControl(struct mixer_ctl *mixerControl,
 
         if (isDebugEnabled()) {
 
-            info() << "Writing alsa element " << getControlName()
-                   << ", index " << elementNumber << " with value " << value;
+            info() << "Writing alsa element " << getControlName() << ", index " << elementNumber
+                   << " with value " << value;
         }
 
         // Write element

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -46,26 +46,20 @@ const char AlsaSubsystemObject::_soundCardPath[] = "/proc/asound/";
 
 AlsaSubsystemObject::AlsaSubsystemObject(const string &mappingValue,
                                          CInstanceConfigurableElement *instanceConfigurableElement,
-                                         const CMappingContext &context,
-                                         core::log::Logger& logger)
-    : base(instanceConfigurableElement, logger, mappingValue),
-      _cardName(context.getItem(AlsaCard)),
+                                         const CMappingContext &context, core::log::Logger &logger)
+    : base(instanceConfigurableElement, logger, mappingValue), _cardName(context.getItem(AlsaCard)),
       _cardIndex(getCardNumberByName(context.getItem(AlsaCard)))
 {
-
 }
 
 AlsaSubsystemObject::AlsaSubsystemObject(const string &mappingValue,
                                          CInstanceConfigurableElement *instanceConfigurableElement,
-                                         core::log::Logger& logger,
-                                         uint32_t firstAmendKey,
-                                         uint32_t nbAmendKeys,
-                                         const CMappingContext &context)
+                                         core::log::Logger &logger, uint32_t firstAmendKey,
+                                         uint32_t nbAmendKeys, const CMappingContext &context)
     : base(instanceConfigurableElement, logger, mappingValue, firstAmendKey, nbAmendKeys, context),
       _cardName(context.getItem(AlsaCard)),
       _cardIndex(getCardNumberByName(context.getItem(AlsaCard)))
 {
-
 }
 int32_t AlsaSubsystemObject::getCardNumberByName(const string &cardName)
 {

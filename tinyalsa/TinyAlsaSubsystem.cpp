@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -37,29 +37,22 @@
 #include "AmixerMutableVolume.hpp"
 #include <string>
 
-TinyAlsaSubsystem::TinyAlsaSubsystem(const std::string &name, core::log::Logger& logger) :
-    AlsaSubsystem(name, logger), mMixers()
+TinyAlsaSubsystem::TinyAlsaSubsystem(const std::string &name, core::log::Logger &logger)
+    : AlsaSubsystem(name, logger), mMixers()
 {
     // Provide creators to upper layer
     addSubsystemObjectFactory(
-        new TSubsystemObjectFactory<TinyAmixerControlValue>("Control", 1 << AlsaCard)
-        );
+        new TSubsystemObjectFactory<TinyAmixerControlValue>("Control", 1 << AlsaCard));
 
     addSubsystemObjectFactory(
-        new TSubsystemObjectFactory<TinyAmixerControlArray>(
-            "ByteControl", 1 << AlsaCard)
-        );
+        new TSubsystemObjectFactory<TinyAmixerControlArray>("ByteControl", 1 << AlsaCard));
 
     addSubsystemObjectFactory(
-        new TSubsystemObjectFactory<
-            AmixerMutableVolume<TinyAmixerControlValue> >("Volume", 1 << AlsaCard)
-        );
+        new TSubsystemObjectFactory<AmixerMutableVolume<TinyAmixerControlValue>>("Volume",
+                                                                                 1 << AlsaCard));
 
-
-    addSubsystemObjectFactory(
-        new TSubsystemObjectFactory<TinyAlsaCtlPortConfig>(
-            "PortConfig", (1 << AlsaCard) | (1 << AlsaCtlDevice))
-        );
+    addSubsystemObjectFactory(new TSubsystemObjectFactory<TinyAlsaCtlPortConfig>(
+        "PortConfig", (1 << AlsaCard) | (1 << AlsaCtlDevice)));
 }
 
 TinyAlsaSubsystem::~TinyAlsaSubsystem()

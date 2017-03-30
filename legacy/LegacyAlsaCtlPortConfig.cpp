@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -38,20 +38,14 @@
 #define base AlsaCtlPortConfig
 
 const AlsaCtlPortConfig::PortConfig LegacyAlsaCtlPortConfig::_defaultPortConfig = {
-    { false, false },
-    SND_PCM_FORMAT_S16_LE,
-    2,
-    48000
-};
+    {false, false}, SND_PCM_FORMAT_S16_LE, 2, 48000};
 
 const uint32_t LegacyAlsaCtlPortConfig::_latencyMicroSeconds = 500000;
 
 LegacyAlsaCtlPortConfig::LegacyAlsaCtlPortConfig(
-    const std::string &mappingValue,
-    CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context,
-    core::log::Logger& logger)
-    :  base(mappingValue, instanceConfigurableElement, context, logger, _defaultPortConfig)
+    const std::string &mappingValue, CInstanceConfigurableElement *instanceConfigurableElement,
+    const CMappingContext &context, core::log::Logger &logger)
+    : base(mappingValue, instanceConfigurableElement, context, logger, _defaultPortConfig)
 {
     // Init stream handle array
     _streamHandle[Playback] = NULL;
@@ -63,11 +57,10 @@ LegacyAlsaCtlPortConfig::LegacyAlsaCtlPortConfig(
     // Create device name
     std::ostringstream streamName;
 
-    streamName << "hw:" << snd_card_get_index(cardIndex.c_str())
-               << "," << context.getItem(AlsaCtlDevice);
+    streamName << "hw:" << snd_card_get_index(cardIndex.c_str()) << ","
+               << context.getItem(AlsaCtlDevice);
 
     _streamName = streamName.str();
-
 }
 
 bool LegacyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, std::string &error)
@@ -76,10 +69,9 @@ bool LegacyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, std:
     int32_t errorId;
 
     if ((errorId = snd_pcm_open(
-             &streamHandle,
-             _streamName.c_str(),
-             streamDirection == Capture ? SND_PCM_STREAM_CAPTURE : SND_PCM_STREAM_PLAYBACK,
-             0)) < 0) {
+             &streamHandle, _streamName.c_str(),
+             streamDirection == Capture ? SND_PCM_STREAM_CAPTURE : SND_PCM_STREAM_PLAYBACK, 0)) <
+        0) {
 
         error = formatAlsaError(streamDirection, "open", snd_strerror(errorId));
 
@@ -88,13 +80,9 @@ bool LegacyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, std:
 
     const AlsaCtlPortConfig::PortConfig &portConfig = getPortConfig();
 
-    if ((errorId = snd_pcm_set_params(streamHandle,
-                                      static_cast<_snd_pcm_format>(portConfig.format),
-                                      SND_PCM_ACCESS_RW_INTERLEAVED,
-                                      portConfig.channelNumber,
-                                      portConfig.sampleRate,
-                                      0,
-                                      _latencyMicroSeconds)) < 0) {
+    if ((errorId = snd_pcm_set_params(streamHandle, static_cast<_snd_pcm_format>(portConfig.format),
+                                      SND_PCM_ACCESS_RW_INTERLEAVED, portConfig.channelNumber,
+                                      portConfig.sampleRate, 0, _latencyMicroSeconds)) < 0) {
 
         error = formatAlsaError(streamDirection, "set params", snd_strerror(errorId));
 

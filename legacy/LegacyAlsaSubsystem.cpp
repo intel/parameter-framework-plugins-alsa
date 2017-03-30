@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -36,27 +36,19 @@
 #include "AmixerMutableVolume.hpp"
 #include <string>
 
-LegacyAlsaSubsystem::LegacyAlsaSubsystem(const std::string &name, core::log::Logger& logger) :
-    AlsaSubsystem(name, logger)
+LegacyAlsaSubsystem::LegacyAlsaSubsystem(const std::string &name, core::log::Logger &logger)
+    : AlsaSubsystem(name, logger)
 {
     // Provide creators to upper layer
     addSubsystemObjectFactory(
-        new TSubsystemObjectFactory<LegacyAmixerControl>("Control", 1 << AlsaCard)
-        );
+        new TSubsystemObjectFactory<LegacyAmixerControl>("Control", 1 << AlsaCard));
 
     addSubsystemObjectFactory(
-        new TSubsystemObjectFactory<LegacyAmixerControl>(
-            "ByteControl", 1 << AlsaCard)
-        );
+        new TSubsystemObjectFactory<LegacyAmixerControl>("ByteControl", 1 << AlsaCard));
 
-    addSubsystemObjectFactory(
-        new TSubsystemObjectFactory<
-            AmixerMutableVolume<LegacyAmixerControl> >("Volume", 1 << AlsaCard)
-        );
+    addSubsystemObjectFactory(new TSubsystemObjectFactory<AmixerMutableVolume<LegacyAmixerControl>>(
+        "Volume", 1 << AlsaCard));
 
-
-    addSubsystemObjectFactory(
-        new TSubsystemObjectFactory<LegacyAlsaCtlPortConfig>(
-            "PortConfig", (1 << AlsaCard) | (1 << AlsaCtlDevice))
-        );
+    addSubsystemObjectFactory(new TSubsystemObjectFactory<LegacyAlsaCtlPortConfig>(
+        "PortConfig", (1 << AlsaCard) | (1 << AlsaCtlDevice)));
 }

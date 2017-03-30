@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -74,8 +74,7 @@ public:
      */
     AmixerMutableVolume(const std::string &mappingValue,
                         CInstanceConfigurableElement *instConfigElement,
-                        const CMappingContext &context,
-                        core::log::Logger& logger)
+                        const CMappingContext &context, core::log::Logger &logger)
         : SubsystemObjectBase(mappingValue, instConfigElement, context, logger),
           _volumeLevelConfigurableElement(NULL)
     {
@@ -113,9 +112,7 @@ int AmixerMutableVolume<SubsystemObjectBase>::fromBlackboard()
     assert(volumeSize <= sizeof(MutableVolume));
 
     // Be aware that this code does not work in big endian if volumeSize < sizeof(MutableVolume)
-    MutableVolume volume = {
-        false, 0
-    };
+    MutableVolume volume = {false, 0};
     this->blackboardRead(&volume, volumeSize);
 
     // Take care of sign extension
@@ -130,8 +127,6 @@ void AmixerMutableVolume<SubsystemObjectBase>::toBlackboard(int volumeLevel)
     assert(volumeSize <= sizeof(MutableVolume));
 
     // Be aware that this code does not work in big endian if volumeSize < sizeof(MutableVolume)
-    const MutableVolume volume = {
-        false, volumeLevel
-    };
+    const MutableVolume volume = {false, volumeLevel};
     this->blackboardWrite(&volume, volumeSize);
 }

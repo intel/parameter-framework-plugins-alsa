@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -31,15 +31,14 @@
 #include <LoggingElementBuilderTemplate.h>
 #include "TinyAlsaSubsystem.hpp"
 
-extern "C"
-{
+extern "C" {
 /**
  * TinyAmixer subsystem builder
  * This function is called when the PFW parses a subsystem structure XML of type "ALSA".
  * It will then create an TinyAMixer Subsystem
  */
 void PARAMETER_FRAMEWORK_PLUGIN_ENTRYPOINT_V1(CSubsystemLibrary *subsystemLibrary,
-                                              core::log::Logger&)
+                                              core::log::Logger &logger)
 {
     subsystemLibrary->addElementBuilder(
         "ALSA", new TLoggingElementBuilderTemplate<TinyAlsaSubsystem>(logger));

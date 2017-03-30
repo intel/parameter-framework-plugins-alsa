@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -36,5 +36,5 @@
 class LegacyAlsaSubsystem : public AlsaSubsystem
 {
 public:
-    LegacyAlsaSubsystem(const std::string &name, core::log::Logger& logger);
+    LegacyAlsaSubsystem(const std::string &name, core::log::Logger &logger);
 };

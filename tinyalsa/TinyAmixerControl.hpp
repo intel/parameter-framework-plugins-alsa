@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -48,8 +48,7 @@ public:
      */
     TinyAmixerControl(const std::string &mappingValue,
                       CInstanceConfigurableElement *instanceConfigurableElement,
-                      const CMappingContext &context,
-                      core::log::Logger& logger);
+                      const CMappingContext &context, core::log::Logger &logger);
 
     /**
      * TinyAMixerControl Class constructor
@@ -61,8 +60,7 @@ public:
      */
     TinyAmixerControl(const std::string &mappingValue,
                       CInstanceConfigurableElement *instanceConfigurableElement,
-                      const CMappingContext &context,
-                      core::log::Logger& logger,
+                      const CMappingContext &context, core::log::Logger &logger,
                       uint32_t scalarSize);
 
 protected:
@@ -86,8 +84,7 @@ protected:
      *
      * @return true if no error
      */
-    virtual bool readControl(struct mixer_ctl *mixerControl,
-                             size_t elementCount,
+    virtual bool readControl(struct mixer_ctl *mixerControl, size_t elementCount,
                              std::string &error) = 0;
 
     /**
@@ -99,7 +96,6 @@ protected:
      *
      * @return true if no error
      */
-    virtual bool writeControl(struct mixer_ctl *mixerControl,
-                              size_t elementCount,
+    virtual bool writeControl(struct mixer_ctl *mixerControl, size_t elementCount,
                               std::string &error) = 0;
 };

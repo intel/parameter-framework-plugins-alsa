@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2016, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -47,8 +47,7 @@ extern "C" void __gcov_flush();
 
 TinyAmixerControl::TinyAmixerControl(const std::string &mappingValue,
                                      CInstanceConfigurableElement *instanceConfigurableElement,
-                                     const CMappingContext &context,
-                                     core::log::Logger& logger)
+                                     const CMappingContext &context, core::log::Logger &logger)
     : base(mappingValue, instanceConfigurableElement, context, logger)
 {
 #ifdef __USE_GCOV__
@@ -58,8 +57,7 @@ TinyAmixerControl::TinyAmixerControl(const std::string &mappingValue,
 
 TinyAmixerControl::TinyAmixerControl(const std::string &mappingValue,
                                      CInstanceConfigurableElement *instanceConfigurableElement,
-                                     const CMappingContext &context,
-                                     core::log::Logger& logger,
+                                     const CMappingContext &context, core::log::Logger &logger,
                                      uint32_t scalarSize)
     : base(mappingValue, instanceConfigurableElement, context, logger, scalarSize)
 {
@@ -100,8 +98,8 @@ bool TinyAmixerControl::accessHW(bool receive, std::string &error)
     // Open alsa mixer
     // getMixerHandle is non-const; we need to forcefully remove the constness
     // then, we need to cast the generic subsystem into a TinyAlsaSubsystem.
-    mixer = static_cast<TinyAlsaSubsystem *>(
-        const_cast<CSubsystem *>(getSubsystem()))->getMixerHandle(cardIndex);
+    mixer = static_cast<TinyAlsaSubsystem *>(const_cast<CSubsystem *>(getSubsystem()))
+                ->getMixerHandle(cardIndex);
 
     if (!mixer) {
 
@@ -112,7 +110,7 @@ bool TinyAmixerControl::accessHW(bool receive, std::string &error)
     // Get control handle
     if (isdigit(controlName[0])) {
         int32_t controlNumber = 0;
-        convertTo(controlName,controlNumber);
+        convertTo(controlName, controlNumber);
         mixerControl = mixer_get_ctl(mixer, controlNumber);
     } else {
 
@@ -150,7 +148,6 @@ bool TinyAmixerControl::accessHW(bool receive, std::string &error)
     } else {
 
         success = writeControl(mixerControl, elementCount, error);
-
     }
 
     return success;

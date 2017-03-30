@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -46,23 +46,20 @@
 
 /* from sound/asound.h, header is not compatible with alsa/asoundlib.h
  */
-struct snd_ctl_tlv {
-    unsigned int numid;     /* control element numeric identification */
-    unsigned int length;    /* in bytes aligned to 4 */
-    unsigned char tlv[];    /* first TLV */
+struct snd_ctl_tlv
+{
+    unsigned int numid;  /* control element numeric identification */
+    unsigned int length; /* in bytes aligned to 4 */
+    unsigned char tlv[]; /* first TLV */
 };
-
 
 #define base AmixerControl
 
-LegacyAmixerControl::LegacyAmixerControl(
-    const std::string &mappingValue,
-    CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context,
-    core::log::Logger& logger)
+LegacyAmixerControl::LegacyAmixerControl(const std::string &mappingValue,
+                                         CInstanceConfigurableElement *instanceConfigurableElement,
+                                         const CMappingContext &context, core::log::Logger &logger)
     : base(mappingValue, instanceConfigurableElement, context, logger)
 {
-
 }
 
 bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
@@ -145,8 +142,7 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
     // Get info
     if ((ret = snd_ctl_elem_info(sndCtrl, info)) < 0) {
 
-        error = "ALSA: Unable to get element info " + controlName +
-                ": " + snd_strerror(ret);
+        error = "ALSA: Unable to get element info " + controlName + ": " + snd_strerror(ret);
 
         // Close sound control
         snd_ctl_close(sndCtrl);
@@ -183,8 +179,7 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
     if (receive) {
 
         // Special hook for TLV Bytes Control
-        if ((eType == SND_CTL_ELEM_TYPE_BYTES) &&
-          snd_ctl_elem_info_is_tlv_readable(info)) {
+        if ((eType == SND_CTL_ELEM_TYPE_BYTES) && snd_ctl_elem_info_is_tlv_readable(info)) {
 
             std::vector<unsigned char> rawTlv(sizeof(struct snd_ctl_tlv) + elementCount);
 
@@ -194,8 +189,7 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
                                         rawTlv.size());
             if (ret < 0) {
 
-                error = "ALSA: Unable to read element " + controlName +
-                        ": " + snd_strerror(ret);
+                error = "ALSA: Unable to read element " + controlName + ": " + snd_strerror(ret);
 
             } else {
                 blackboardWrite(tlv->tlv, elementCount);
@@ -210,8 +204,7 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
         // Read element
         if ((ret = snd_ctl_elem_read(sndCtrl, control)) < 0) {
 
-            error = "ALSA: Unable to read element " + controlName +
-                    ": " + snd_strerror(ret);
+            error = "ALSA: Unable to read element " + controlName + ": " + snd_strerror(ret);
 
             // Close sound control
             snd_ctl_close(sndCtrl);
@@ -229,9 +222,11 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
                 // The "info" method has been shadowed by a local variable
                 this->info() << "Reading alsa element " << controlName << ": "
                              << std::accumulate(first, last, std::string{},
-                    [](const std::string& a, std::vector<unsigned char>::value_type b) {
-                        return a.empty() ? std::to_string(b) : a + ',' + std::to_string(b);
-                    });
+                                                [](const std::string &a,
+                                                   std::vector<unsigned char>::value_type b) {
+                                                    return a.empty() ? std::to_string(b)
+                                                                     : a + ',' + std::to_string(b);
+                                                });
             }
 
             blackboardWrite(data, elementCount);
@@ -263,8 +258,8 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
                 if (isDebugEnabled()) {
 
                     // The "info" method has been shadowed by a local variable
-                    this->info() << "Reading alsa element " << controlName
-                                 << ", index " << index << " with value " << value;
+                    this->info() << "Reading alsa element " << controlName << ", index " << index
+                                 << " with value " << value;
                 }
 
                 // Write data to blackboard (beware this code is OK on Little Endian machines only)
@@ -275,8 +270,7 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
     } else {
 
         // Special hook for TLV Bytes Control
-        if ((eType == SND_CTL_ELEM_TYPE_BYTES) &&
-            snd_ctl_elem_info_is_tlv_writable(info)) {
+        if ((eType == SND_CTL_ELEM_TYPE_BYTES) && snd_ctl_elem_info_is_tlv_writable(info)) {
 
             std::vector<unsigned char> rawTlv(sizeof(struct snd_ctl_tlv) + elementCount);
 
@@ -290,8 +284,7 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
             ret = snd_ctl_elem_tlv_write(sndCtrl, id, reinterpret_cast<unsigned int *>(tlv));
             if (ret < 0) {
 
-                error = "ALSA: Unable to write element " + controlName +
-                        ": " + snd_strerror(ret);
+                error = "ALSA: Unable to write element " + controlName + ": " + snd_strerror(ret);
             }
 
             // Close sound control
@@ -310,10 +303,11 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
                 // The "info" method has been shadowed by a local variable
                 this->info() << "Writing alsa element " << controlName << ": "
                              << std::accumulate(begin(rawData), end(rawData), std::string{},
-                    [](const std::string& a, std::vector<unsigned char>::value_type b) {
-                        return a.empty() ? std::to_string(b) : a + ',' + std::to_string(b);
-                    });
-
+                                                [](const std::string &a,
+                                                   std::vector<unsigned char>::value_type b) {
+                                                    return a.empty() ? std::to_string(b)
+                                                                     : a + ',' + std::to_string(b);
+                                                });
             }
 
             snd_ctl_elem_set_bytes(control, rawData.data(), elementCount);
@@ -328,8 +322,8 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
                 if (isDebugEnabled()) {
 
                     // The "info" method has been shadowed by a local variable
-                    this->info() << "Writing alsa element " << controlName
-                                 << ", index " << index << " with value " << value;
+                    this->info() << "Writing alsa element " << controlName << ", index " << index
+                                 << " with value " << value;
                 }
 
                 switch (eType) {
@@ -347,7 +341,7 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
                     break;
                 default:
                     error = "ALSA: Unknown control element type while writing alsa element " +
-                        controlName;
+                            controlName;
                     return false;
                 }
             }
@@ -356,9 +350,7 @@ bool LegacyAmixerControl::accessHW(bool receive, std::string &error)
         // Write element
         if ((ret = snd_ctl_elem_write(sndCtrl, control)) < 0) {
 
-            error = "ALSA: Unable to write element " + controlName +
-                    ": " + snd_strerror(ret);
-
+            error = "ALSA: Unable to write element " + controlName + ": " + snd_strerror(ret);
 
             // Close sound control
             snd_ctl_close(sndCtrl);

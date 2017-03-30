@@ -11,14 +11,20 @@ env:
 
 addons:
     apt:
+        # Travis white list of ppa
+        # https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
         sources:
             - ubuntu-toolchain-r-test
             - george-edison55-precise-backports
+            - llvm-toolchain-precise-3.8
+        # Travis white list of dpkg packages
+        # https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
         packages:
             - g++-4.8
             - cmake-data
             - cmake
             - libasound2-dev
+            - clang-format-3.8
 
 before_install:
     - mkdir $CMAKE_PREFIX_PATH
@@ -30,7 +36,12 @@ install:
 before_script:
     - export CC=gcc-4.8 CXX=g++-4.8
 
+# how to build
 script:
+    # Check coding style
+    - (git ls-files | grep -E '\.[ch](pp)?$' |  xargs clang-format-3.8 -i &&
+        git diff --exit-code || { git reset --hard; false; })
+
     - ( mkdir -p build/debug && cd build/debug &&
         cmake -DCMAKE_BUILD_TYPE=Debug $TRAVIS_BUILD_DIR && make -j$(nproc) )
     - ( mkdir build/release && cd build &&

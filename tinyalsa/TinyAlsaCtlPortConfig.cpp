@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2016, Intel Corporation
+ * Copyright (c) 2011-2017, Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -43,34 +43,28 @@ const int TinyAlsaCtlPortConfig::_nbRingBuffer = 2;
 const AlsaCtlPortConfig::FormatTranslation pcmFormatTranslationTable[] = {
 
     // TinyAlsa Value,                               // Litteral Value,     // Alsa Value
-    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_S8" },     // SND_PCM_FORMAT_S8
-    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_U8" },     // SND_PCM_FORMAT_U8
-    { PCM_FORMAT_S16_LE                  ,    "PCM_FORMAT_S16_LE" }, // SND_PCM_FORMAT_S16_LE
-    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_S16_BE" }, // SND_PCM_FORMAT_S16_BE
-    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_U16_LE" }, // SND_PCM_FORMAT_U16_LE
-    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_U16_BE" }, // SND_PCM_FORMAT_U16_BE
-    { PCM_FORMAT_S24_LE                  ,    "PCM_FORMAT_S24_LE" }, // SND_PCM_FORMAT_S24_LE
-    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_S24_BE" }, // SND_PCM_FORMAT_S24_BE
-    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_U24_LE" }, // SND_PCM_FORMAT_U24_LE
-    { std::numeric_limits<uint8_t>::max(),    "PCM_FORMAT_U24_BE" }, // SND_PCM_FORMAT_U24_BE
-    { PCM_FORMAT_S32_LE                  ,    "PCM_FORMAT_S32_LE" }  // SND_PCM_FORMAT_S32_LE
+    {std::numeric_limits<uint8_t>::max(), "PCM_FORMAT_S8"},     // SND_PCM_FORMAT_S8
+    {std::numeric_limits<uint8_t>::max(), "PCM_FORMAT_U8"},     // SND_PCM_FORMAT_U8
+    {PCM_FORMAT_S16_LE, "PCM_FORMAT_S16_LE"},                   // SND_PCM_FORMAT_S16_LE
+    {std::numeric_limits<uint8_t>::max(), "PCM_FORMAT_S16_BE"}, // SND_PCM_FORMAT_S16_BE
+    {std::numeric_limits<uint8_t>::max(), "PCM_FORMAT_U16_LE"}, // SND_PCM_FORMAT_U16_LE
+    {std::numeric_limits<uint8_t>::max(), "PCM_FORMAT_U16_BE"}, // SND_PCM_FORMAT_U16_BE
+    {PCM_FORMAT_S24_LE, "PCM_FORMAT_S24_LE"},                   // SND_PCM_FORMAT_S24_LE
+    {std::numeric_limits<uint8_t>::max(), "PCM_FORMAT_S24_BE"}, // SND_PCM_FORMAT_S24_BE
+    {std::numeric_limits<uint8_t>::max(), "PCM_FORMAT_U24_LE"}, // SND_PCM_FORMAT_U24_LE
+    {std::numeric_limits<uint8_t>::max(), "PCM_FORMAT_U24_BE"}, // SND_PCM_FORMAT_U24_BE
+    {PCM_FORMAT_S32_LE, "PCM_FORMAT_S32_LE"}                    // SND_PCM_FORMAT_S32_LE
 };
 
 const size_t pcmFormatTranslationTableSize =
     sizeof(pcmFormatTranslationTable) / sizeof(pcmFormatTranslationTable[0]);
 
 const AlsaCtlPortConfig::PortConfig TinyAlsaCtlPortConfig::_defaultPortConfig = {
-    { false, false },
-    PCM_FORMAT_S16_LE,
-    2,
-    48000
-};
+    {false, false}, PCM_FORMAT_S16_LE, 2, 48000};
 
 TinyAlsaCtlPortConfig::TinyAlsaCtlPortConfig(
-    const std::string &mappingValue,
-    CInstanceConfigurableElement *instanceConfigurableElement,
-    const CMappingContext &context,
-    core::log::Logger& logger)
+    const std::string &mappingValue, CInstanceConfigurableElement *instanceConfigurableElement,
+    const CMappingContext &context, core::log::Logger &logger)
     : base(mappingValue, instanceConfigurableElement, context, logger, _defaultPortConfig)
 {
     // Init stream handle array
@@ -109,19 +103,17 @@ bool TinyAlsaCtlPortConfig::doOpenStream(StreamDirection streamDirection, std::s
 
     pcmConfig.format = static_cast<pcm_format>(format);
 
-    pcmConfig.period_size       = _periodTimeMs * pcmConfig.rate / _msPerSec;
-    pcmConfig.period_count      = _nbRingBuffer;
-    pcmConfig.start_threshold   = 0;
-    pcmConfig.stop_threshold    = 0;
+    pcmConfig.period_size = _periodTimeMs * pcmConfig.rate / _msPerSec;
+    pcmConfig.period_count = _nbRingBuffer;
+    pcmConfig.start_threshold = 0;
+    pcmConfig.stop_threshold = 0;
     pcmConfig.silence_threshold = 0;
-    pcmConfig.silence_size      = 0;
-    pcmConfig.avail_min         = 0;
+    pcmConfig.silence_size = 0;
+    pcmConfig.avail_min = 0;
 
     // Open and configure
-    streamHandle = pcm_open(getCardNumber(),
-                            getDeviceNumber(),
-                            streamDirection == Capture ? PCM_IN : PCM_OUT,
-                            &pcmConfig);
+    streamHandle = pcm_open(getCardNumber(), getDeviceNumber(),
+                            streamDirection == Capture ? PCM_IN : PCM_OUT, &pcmConfig);
 
     // Prepare the stream
     if (!pcm_is_ready(streamHandle) || (pcm_prepare(streamHandle) != 0)) {
